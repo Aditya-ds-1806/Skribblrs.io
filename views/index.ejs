@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skribblrs.io</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body class="vh-100">
+    <section class="container" id="landing">
+        <div class="row justify-content-center">
+            <div class="col-6 bg-white rounded p-3">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="playerName" placeholder="Name" required>
+                    <label for="playerName">Name</label>
+                </div>
+                <div class="row mx-0">
+                    <div class="col-5">
+                        <img id="avatar" class="img-fluid" src="https://avatars.dicebear.com/4.5/api/avataaars/.svg"
+                            alt="Avatar">
+                    </div>
+                    <div class="col-7">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="style">Style</label>
+                            <select class="form-select" id="style">
+                                <option value="Avataaars" selected>Avataaars</option>
+                                <option value="Bottts">Bottts</option>
+                                <option value="Female">Female</option>
+                                <option value="Gridy">Gridy</option>
+                                <option value="Human">Human</option>
+                                <option value="Identicon">Identicon</option>
+                                <option value="Initials">Initials</option>
+                                <option value="Jdenticon">Jdenticon</option>
+                                <option value="Male">Male</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="bgColor" class="form-label">Background Color</label>
+                            <input type="color" class="form-control form-control-color" id="bgColor" value="#FFFFFF"
+                                title="Choose your color">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-3" id="createRoom">Create Private Room</button>
+                    <button class="btn btn-success mt-3 disabled" id="playGame">Play</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container d-none" id="settings">
+        <div class="row justify-content-between">
+            <div class="col-6 bg-white rounded p-3">
+                <h1 class="text-center">Settings</h1>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="rounds">Rounds</label>
+                    <select class="form-select" id="rounds">
+                        <option value="2" selected>2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="time">Draw time in seconds</label>
+                    <select class="form-select" id="time">
+                        <option value="30">30</option>
+                        <option value="40" selected>40</option>
+                        <option value="50">50</option>
+                        <option value="60">60</option>
+                        <option value="70">70</option>
+                        <option value="80">80</option>
+                        <option value="90">90</option>
+                        <option value="100">100</option>
+                        <option value="110">110</option>
+                        <option value="120">120</option>
+                        <option value="130">130</option>
+                        <option value="140">140</option>
+                        <option value="150">150</option>
+                        <option value="160">160</option>
+                        <option value="170">170</option>
+                        <option value="180">180</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-100" id="startGame">Start Game</button>
+            </div>
+            <div class="col-6 text-white">
+                <h1 class="text-center">Players</h1>
+            </div>
+        </div>
+        <div class="mt-5">
+            <h1 class="text-white text-center">Invite your friends!</h1>
+            <div class="input-group mb-3">
+                <input type="text" id="gameLink" class="form-control text-center fw-bold bg-white"
+                    value="https://skribbl.io/?id=Mlvx2dGgjqi1" readonly>
+                <button class="btn btn-warning" type="button" id="copy">Copy Link</button>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
+    <script src="js/avatar.js"></script>
+    <script src="js/control.js"></script>
+</body>
+
+</html>

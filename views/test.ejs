@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nanoid/3.1.20/index.browser.min.js"
+        integrity="sha512-N6Y5tP+j5GdVQDptp6YurOfG6jPZ7DcoxBWxteZsDpChZY0Jkeb7j75DJViygQSetfl7YBLQ2hAbJfQtIPBUEw=="
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <form>
+        <input type="text" placeholder="Enter message">
+        <button type="submit">Send</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
+    <script>
+        var params = location.toString().substring(location.toString().indexOf('?'));
+        var searchParams = new URLSearchParams(params);
+        var gameSocket = io();
+        // var socket = io("http://localhost:3000");
+        if (searchParams.has("id")) {
+            console.log(searchParams.get("id"))
+            gameSocket.emit("gameID", { gameID: searchParams.get("id") });
+        } else {
+            // generate new id
+            gameSocket.emit("gameID", { gameID: "AdityaCoolGuy" });
+        }
+        // document.querySelector("form").addEventListener("submit", function (e) {
+        //     e.preventDefault();
+        //     console.log("emitting message");
+        //     gameSocket.emit("message", document.querySelector("input").value);
+        //     // socket.emit("message", document.querySelector("input").value);
+        // });
+        gameSocket.on("message", message => document.body.append("Me: " + message));
+        gameSocket.on("join", message => document.body.append("Me: " + message));
+        // socket.on("message", message => document.body.append("Owner: " + message));
+    </script>
+</body>
+
+</html>
