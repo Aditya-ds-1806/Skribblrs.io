@@ -4,7 +4,7 @@
   "description": "A clone of skribbl.io",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "author": "Aditya D.S.",
   "license": "MIT",
