@@ -24,10 +24,16 @@ io.on('connection', socket => {
         var id = nanoid(15);
         socket.emit('newPrivateRoom', { gameID: id });
         socket.join(id);
+        console.log();
     });
 
     socket.on("joinRoom", data => {
         socket.join(data.id);
         socket.to(data.id).emit("join", "a new memeber has joined the room");
-    })
+    });
+
+    socket.on("settingsUpdate", data => {
+        const roomID = Array.from(socket.rooms)[1];
+        socket.to(roomID).emit("settingsUpdate", data);
+    });
 });

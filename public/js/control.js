@@ -3,14 +3,32 @@ var params = location.toString().substring(location.toString().indexOf('?'));
 var searchParams = new URLSearchParams(params);
 var copyBtn = document.querySelector("#copy");
 
-socket.on('join', data => {
-    console.log(data);
-})
-
 if (searchParams.has("id")) {
+    // player
     document.querySelector("#playGame").classList.remove('disabled');
     document.querySelector("#createRoom").classList.add('disabled');
-};
+    document.querySelector("#rounds").setAttribute('disabled', true);
+    document.querySelector("#time").setAttribute('disabled', true);
+
+    socket.on("settingsUpdate", data => {
+        document.querySelector("#rounds").value = data.rounds;
+        document.querySelector("#time").value = data.time;
+    });
+
+} else {
+    // room owner
+    document.querySelector("#rounds").addEventListener('input', updateSettings);
+    document.querySelector("#time").addEventListener('input', updateSettings);
+}
+
+function updateSettings(e) {
+    e.preventDefault();
+    socket.emit("settingsUpdate", {
+        rounds: document.querySelector("#rounds").value,
+        time: document.querySelector("#time").value
+    });
+}
+
 copyBtn.addEventListener('click', function (e) {
     e.preventDefault();
     document.querySelector("#gameLink").select();
