@@ -13,5 +13,19 @@
     "express": "^4.17.1",
     "nanoid": "^3.1.20",
     "socket.io": "^3.0.4"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aditya-ds-1806/Skribblrs.io.git"
+  },
+  "keywords": [
+    "skribbl.io",
+    "socket.io",
+    "websockets"
+  ],
+  "bugs": {
+    "url": "https://github.com/Aditya-ds-1806/Skribblrs.io/issues"
+  },
+  "homepage": "skribblrs.herokuapp.com"
 }
