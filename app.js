@@ -20,16 +20,29 @@ var io = socket(server);
 
 io.on('connection', socket => {
     console.log("connected user");
-    socket.on("newPrivateRoom", _ => {
+    socket.on("newPrivateRoom", player => {
         var id = nanoid(15);
-        socket.emit('newPrivateRoom', { gameID: id });
+        socket.player = player;
         socket.join(id);
-        console.log();
+        socket.emit('newPrivateRoom', { gameID: id });
     });
 
-    socket.on("joinRoom", data => {
+    socket.on("joinRoom", async function (data) {
+        socket.player = data.player;
         socket.join(data.id);
-        socket.to(data.id).emit("join", "a new memeber has joined the room");
+        const roomID = Array.from(socket.rooms)[1];
+        socket.to(data.id).emit("joinRoom", data.player);
+        var players = await io.in(roomID).allSockets();
+        players = Array.from(players);
+        socket.emit("otherPlayers",
+            players.reduce((acc, id) => {
+                if (socket.id !== id) {
+                    const player = io.of('/').sockets.get(id).player;
+                    acc.push(player);
+                }
+                return acc;
+            }, [])
+        );
     });
 
     socket.on("settingsUpdate", data => {
