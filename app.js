@@ -23,14 +23,17 @@ io.on('connection', socket => {
     socket.on("newPrivateRoom", player => {
         var id = nanoid(15);
         socket.player = player;
+        socket.roomID = id;
         socket.join(id);
         socket.emit('newPrivateRoom', { gameID: id });
     });
 
     socket.on("joinRoom", async function (data) {
         socket.player = data.player;
+        data.player.id = socket.id;
         socket.join(data.id);
         const roomID = Array.from(socket.rooms)[1];
+        socket.roomID = roomID;
         socket.to(data.id).emit("joinRoom", data.player);
         var players = await io.in(roomID).allSockets();
         players = Array.from(players);
@@ -46,7 +49,13 @@ io.on('connection', socket => {
     });
 
     socket.on("settingsUpdate", data => {
-        const roomID = Array.from(socket.rooms)[1];
-        socket.to(roomID).emit("settingsUpdate", data);
+        socket.to(socket.roomID).emit("settingsUpdate", data);
+    });
+
+    socket.on("disconnect", reason => {
+        if (socket.player) {
+            socket.player.id = socket.id;
+            socket.to(socket.roomID).emit("disconnection", socket.player);
+        }
     });
 });
