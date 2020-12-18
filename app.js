@@ -23,6 +23,7 @@ io.on('connection', socket => {
     socket.on("newPrivateRoom", player => {
         var id = nanoid(15);
         socket.player = player;
+        socket.player.id = socket.id;
         socket.roomID = id;
         socket.join(id);
         socket.emit('newPrivateRoom', { gameID: id });

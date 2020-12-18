@@ -5,10 +5,7 @@ var copyBtn = document.querySelector("#copy");
 
 socket.on("joinRoom", putPlayer);
 socket.on("otherPlayers", players => players.forEach(player => putPlayer(player)));
-socket.on("disconnection", player => {
-    console.log(player);
-    document.querySelector(`#${player.id}`).remove();
-});
+socket.on("disconnection", player => document.querySelector(`#${player.id}`).remove());
 
 if (searchParams.has("id")) {
     // player
@@ -40,7 +37,7 @@ function putPlayer(player) {
     var img = document.createElement("img");
     var p = document.createElement("p");
     var text = document.createTextNode(player.name);
-    div.id = player.id || socket.id;
+    div.id = player.id;
     p.appendChild(text);
     p.classList.add("text-center");
     img.src = player.avatar;
