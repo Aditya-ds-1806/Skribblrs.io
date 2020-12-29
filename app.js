@@ -59,6 +59,20 @@ io.on('connection', socket => {
         socket.broadcast.to(socket.roomID).emit("drawing", data);
     });
 
+    socket.on("startGame", _ => socket.to(socket.roomID).emit("startGame"));
+
+    socket.on("getPlayers", async _ => {
+        var players = Array.from(await io.in(socket.roomID).allSockets());
+        io.in(socket.roomID).emit("getPlayers",
+            players.reduce((acc, id) => {
+                const player = io.of('/').sockets.get(id).player;
+                acc.push(player);
+                return acc;
+            }, []))
+    });
+
+    socket.on("message", data => io.in(socket.roomID).emit("message", data));
+
     socket.on("disconnect", reason => {
         if (socket.player) {
             socket.player.id = socket.id;
