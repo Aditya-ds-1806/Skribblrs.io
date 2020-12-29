@@ -46,3 +46,18 @@ body {
 .color.yellow {
     background-color: yellow;
 }
+
+/* players */
+div.players div.row:nth-of-type(2n+1) {
+    background-color: rgba(207, 204, 204, 0.973) !important;
+}
+
+/* chat */
+.messages {
+    overflow-y: auto;
+    height: 25em;
+}
+
+.messages p:nth-last-of-type(2n) {
+    background-color: rgba(207, 204, 204, 0.973);
+}
