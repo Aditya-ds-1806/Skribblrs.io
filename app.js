@@ -1,3 +1,4 @@
+const { readFileSync } = require('fs');
 const express = require('express');
 const app = express();
 const socket = require('socket.io');
@@ -7,8 +8,9 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
-    res.render('index.ejs');
-    // res.render('test.ejs');
+    var words = JSON.parse(readFileSync('words.json').toString('utf-8'));
+    var index = Math.floor(Math.random() * (words.length + 1));
+    res.render('index', { word: words[index] });
 });
 
 var server = app.listen(process.env.PORT || 3000, process.env.IP, function () {
@@ -51,6 +53,10 @@ io.on('connection', socket => {
 
     socket.on("settingsUpdate", data => {
         socket.to(socket.roomID).emit("settingsUpdate", data);
+    });
+
+    socket.on("drawing", data => {
+        socket.broadcast.to(socket.roomID).emit("drawing", data);
     });
 
     socket.on("disconnect", reason => {
