@@ -106,6 +106,25 @@
             </div>
         </div>
     </section>
+
+    <section class="container-fluid d-none" id="gameZone">
+        <div class="row justify-content-center">
+            <div class="col-8 text-center">
+                <p>
+                    <%= word %>
+                </p>
+                <canvas class="whiteboard"></canvas>
+                <div class="d-flex colors justify-content-center">
+                    <div class="color black mx-1"></div>
+                    <div class="color red mx-1"></div>
+                    <div class="color green mx-1"></div>
+                    <div class="color blue mx-1"></div>
+                    <div class="color yellow mx-1"></div>
+                </div>
+            </div>
+        </div>
+
+    </section>
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
     <script src="js/avatar.js"></script>
     <script src="js/control.js"></script>

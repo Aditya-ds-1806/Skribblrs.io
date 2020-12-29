@@ -5,9 +5,44 @@ body {
     background-size: 250px;
 }
 
-section.container {
+#landing,
+#settings {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+/* canvas */
+
+.whiteboard {
+    height: 30em;
+    width: 40em;
+    background-color: #fff;
+}
+
+.color {
+    display: inline-block;
+    height: 48px;
+    width: 48px;
+}
+
+.color.black {
+    background-color: black;
+}
+
+.color.red {
+    background-color: red;
+}
+
+.color.green {
+    background-color: green;
+}
+
+.color.blue {
+    background-color: blue;
+}
+
+.color.yellow {
+    background-color: yellow;
 }

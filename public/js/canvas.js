@@ -2,7 +2,7 @@
 
 (function () {
 
-    var socket = io();
+    var rect = 0, scaleX = 1, scaleY = 1;
     var canvas = document.getElementsByClassName('whiteboard')[0];
     var colors = document.getElementsByClassName('color');
     var context = canvas.getContext('2d');
@@ -57,21 +57,21 @@
 
     function onMouseDown(e) {
         drawing = true;
-        current.x = e.clientX || e.touches[0].clientX;
-        current.y = e.clientY || e.touches[0].clientY;
+        current.x = (e.clientX - rect.left) * scaleX || (e.touches[0].clientX - rect.left) * scaleX;
+        current.y = (e.clientY - rect.top) * scaleY || (e.touches[0].clientY - rect.top) * scaleY;
     }
 
     function onMouseUp(e) {
         if (!drawing) { return; }
         drawing = false;
-        drawLine(current.x, current.y, e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, current.color, true);
+        drawLine(current.x, current.y, (e.clientX - rect.left) * scaleX || (e.touches[0].clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY || (e.touches[0].clientY - rect.top) * scaleY, current.color, true);
     }
 
     function onMouseMove(e) {
-        if (!drawing) { return; }
-        drawLine(current.x, current.y, e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, current.color, true);
-        current.x = e.clientX || e.touches[0].clientX;
-        current.y = e.clientY || e.touches[0].clientY;
+        if (!drawing) return;
+        drawLine(current.x, current.y, (e.clientX - rect.left) * scaleX || (e.touches[0].clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY || (e.touches[0].clientY - rect.top) * scaleY, current.color, true);
+        current.x = (e.clientX - rect.left) * scaleX || (e.touches[0].clientX - rect.left) * scaleX;
+        current.y = (e.clientY - rect.top) * scaleY || (e.touches[0].clientY - rect.top) * scaleY;
     }
 
     function onColorUpdate(e) {
@@ -99,8 +99,13 @@
 
     // make the canvas fill its parent
     function onResize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        var contents = context.getImageData(0, 0, canvas.width, canvas.height);
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+        rect = canvas.getBoundingClientRect();
+        scaleX = canvas.width / rect.width;
+        scaleY = canvas.height / rect.height;
+        context.putImageData(contents, 0, 0);
     }
 
 })();

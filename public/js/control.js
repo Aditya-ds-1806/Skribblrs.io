@@ -76,3 +76,11 @@ document.querySelector("#playGame").addEventListener("click", function () {
     }
     socket.emit("joinRoom", { id: searchParams.get("id"), player: my });
 });
+
+document.querySelector("#startGame").addEventListener("click", function () {
+    document.querySelector("#settings").classList.add("d-none");
+    document.querySelector("#gameZone").classList.remove("d-none");
+    var script = document.createElement('script');
+    script.src = "js/canvas.js";
+    document.body.append(script);
+});
