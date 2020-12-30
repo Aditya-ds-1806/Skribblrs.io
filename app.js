@@ -71,7 +71,10 @@ io.on('connection', socket => {
             }, []))
     });
 
-    socket.on("message", data => io.in(socket.roomID).emit("message", data));
+    socket.on("message", data => {
+        data.name = socket.player.name;
+        io.in(socket.roomID).emit("message", data);
+    });
 
     socket.on("disconnect", reason => {
         if (socket.player) {

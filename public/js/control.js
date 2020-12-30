@@ -8,9 +8,9 @@ socket.on("otherPlayers", players => players.forEach(player => putPlayer(player)
 socket.on("disconnection", player => document.querySelector(`#${player.id}`).remove());
 socket.on("startGame", showCanvasArea);
 socket.on("getPlayers", players => createScoreCard(players));
-socket.on("message", ({ sender, message }) => {
+socket.on("message", ({ name, message }) => {
     var p = document.createElement("p");
-    var chat = document.createTextNode(`${sender}: ${message}`);
+    var chat = document.createTextNode(`${name}: ${message}`);
     p.classList.add("p-2", "mb-0");
     p.append(chat);
     document.querySelector(".messages").appendChild(p);
@@ -20,7 +20,7 @@ document.querySelector("#sendMessage").addEventListener("submit", function (e) {
     e.preventDefault();
     const message = this.firstElementChild.value;
     this.firstElementChild.value = "";
-    socket.emit("message", { sender: socket.id, message: message });
+    socket.emit("message", { message: message });
 })
 
 if (searchParams.has("id")) {
