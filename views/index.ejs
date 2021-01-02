@@ -109,11 +109,16 @@
 
     <section class="container d-none" id="gameZone">
         <div class="alert alert-info py-2 rounded-0" role="alert">
-            <p class="lead text-center mb-0">
-                <strong>
-                    <%= word %>
-                </strong>
-            </p>
+            <div class="row">
+                <div class="col-2">
+                    <p class="lead mb-0">90</p>
+                </div>
+                <div class="col-8">
+                    <p class="lead text-center mb-0">
+                        <strong id="word"></strong>
+                    </p>
+                </div>
+            </div>
         </div>
         <div class="row justify-content-center mx-0">
             <div class="col-2 h-100 players"></div>

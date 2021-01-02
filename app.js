@@ -3,14 +3,14 @@ const express = require('express');
 const app = express();
 const socket = require('socket.io');
 const { nanoid } = require('nanoid');
+const words = JSON.parse(readFileSync('words.json').toString('utf-8'));
+var games = {};
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
-    var words = JSON.parse(readFileSync('words.json').toString('utf-8'));
-    var index = Math.floor(Math.random() * (words.length + 1));
-    res.render('index', { word: words[index] });
+    res.render('index');
 });
 
 var server = app.listen(process.env.PORT || 3000, process.env.IP, function () {
@@ -24,6 +24,11 @@ io.on('connection', socket => {
     console.log("connected user");
     socket.on("newPrivateRoom", player => {
         var id = nanoid(15);
+        games[id] = {
+            rounds: 2,
+            time: 40 * 1000
+        }
+        console.log(games);
         socket.player = player;
         socket.player.id = socket.id;
         socket.roomID = id;
@@ -52,6 +57,8 @@ io.on('connection', socket => {
     });
 
     socket.on("settingsUpdate", data => {
+        games[socket.roomID].time = data.time;
+        games[socket.roomID].rounds = data.rounds;
         socket.to(socket.roomID).emit("settingsUpdate", data);
     });
 
@@ -59,7 +66,26 @@ io.on('connection', socket => {
         socket.broadcast.to(socket.roomID).emit("drawing", data);
     });
 
-    socket.on("startGame", _ => socket.to(socket.roomID).emit("startGame"));
+    socket.on("startGame", async _ => {
+        socket.to(socket.roomID).emit("startGame");
+        var time = games[socket.roomID].time;
+        var rounds = games[socket.roomID].rounds;
+        var players = Array.from(await io.in(socket.roomID).allSockets());
+        for (j = 0; j < rounds; j++) {
+            for (let i = 0; i < players.length; i++) {
+                const player = players[i];
+                const prevPlayer = players[(i - 1 + players.length) % players.length];
+                var index = Math.floor(Math.random() * (words.length + 1));
+                var word = words[index];
+                console.log(`sent word: ${word}`);
+                io.to(socket.roomID).emit("hideWord", { word: word.replace(/[A-Za-z]/g, "_ ") });
+                io.to(player).emit("newWord", { word: word });
+                io.to(prevPlayer).emit("disableCanvas");
+                await wait(time);
+            }
+            await wait(2000);
+        }
+    });
 
     socket.on("getPlayers", async _ => {
         var players = Array.from(await io.in(socket.roomID).allSockets());
@@ -83,3 +109,7 @@ io.on('connection', socket => {
         }
     });
 });
+
+function wait(ms) {
+    return new Promise(res => setTimeout(res, ms));
+}
