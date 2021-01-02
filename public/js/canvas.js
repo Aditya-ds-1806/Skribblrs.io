@@ -20,31 +20,11 @@
 
     socket.on("newWord", ({ word }) => {
         document.querySelector("#word").textContent = word;
-        canvas.addEventListener('mousedown', onMouseDown, false);
-        canvas.addEventListener('mouseup', onMouseUp, false);
-        canvas.addEventListener('mouseout', onMouseUp, false);
-        canvas.addEventListener('mousemove', throttle(onMouseMove, 10), false);
-
-        //Touch support for mobile devices
-        canvas.addEventListener('touchstart', onMouseDown, false);
-        canvas.addEventListener('touchend', onMouseUp, false);
-        canvas.addEventListener('touchcancel', onMouseUp, false);
-        canvas.addEventListener('touchmove', throttle(onMouseMove, 10), false);
+        enableCanvas();
     });
 
 
-    socket.on("disableCanvas", _ => {
-        canvas.removeEventListener('mousedown', onMouseDown, false);
-        canvas.removeEventListener('mouseup', onMouseUp, false);
-        canvas.removeEventListener('mouseout', onMouseUp, false);
-        canvas.removeEventListener('mousemove', throttle(onMouseMove, 10), false);
-
-        //Touch support for mobile devices
-        canvas.removeEventListener('touchstart', onMouseDown, false);
-        canvas.removeEventListener('touchend', onMouseUp, false);
-        canvas.removeEventListener('touchcancel', onMouseUp, false);
-        canvas.removeEventListener('touchmove', throttle(onMouseMove, 10), false);
-    });
+    socket.on("disableCanvas", disableCanvas);
 
     window.addEventListener('resize', onResize, false);
     onResize();
@@ -125,4 +105,29 @@
         context.putImageData(contents, 0, 0);
     }
 
+    function enableCanvas() {
+        canvas.addEventListener('mousedown', onMouseDown, false);
+        canvas.addEventListener('mouseup', onMouseUp, false);
+        canvas.addEventListener('mouseout', onMouseUp, false);
+        canvas.addEventListener('mousemove', throttle(onMouseMove, 10), false);
+
+        //Touch support for mobile devices
+        canvas.addEventListener('touchstart', onMouseDown, false);
+        canvas.addEventListener('touchend', onMouseUp, false);
+        canvas.addEventListener('touchcancel', onMouseUp, false);
+        canvas.addEventListener('touchmove', throttle(onMouseMove, 10), false);
+    }
+
+    function disableCanvas() {
+        canvas.removeEventListener('mousedown', onMouseDown, false);
+        canvas.removeEventListener('mouseup', onMouseUp, false);
+        canvas.removeEventListener('mouseout', onMouseUp, false);
+        canvas.removeEventListener('mousemove', throttle(onMouseMove, 10), false);
+
+        //Touch support for mobile devices
+        canvas.removeEventListener('touchstart', onMouseDown, false);
+        canvas.removeEventListener('touchend', onMouseUp, false);
+        canvas.removeEventListener('touchcancel', onMouseUp, false);
+        canvas.removeEventListener('touchmove', throttle(onMouseMove, 10), false);
+    }
 })();
