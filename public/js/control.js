@@ -9,6 +9,7 @@ socket.on("disconnection", player => document.querySelector(`#${player.id}`).rem
 socket.on("startGame", showCanvasArea);
 socket.on("getPlayers", players => createScoreCard(players));
 socket.on("hideWord", ({ word }) => document.querySelector("#word").textContent = word);
+socket.on("startTimer", ({ time }) => startTimer(time));
 
 socket.on("message", ({ name, message }) => {
     var p = document.createElement("p");
@@ -93,6 +94,15 @@ function createScoreCard(players) {
         p2.append(score);
         document.querySelector(".players").append(div);
     });
+}
+
+function startTimer(ms) {
+    var secs = ms / 1000;
+    var id = setInterval(function () {
+        if (secs === 0) clearInterval(id);
+        document.querySelector("#clock").textContent = secs;
+        secs--;
+    }, 1000)
 }
 
 function showCanvasArea() {

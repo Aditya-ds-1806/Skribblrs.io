@@ -79,6 +79,7 @@ io.on('connection', socket => {
                 var word = words[index];
                 console.log(`sent word: ${word}`);
                 io.to(socket.roomID).emit("hideWord", { word: word.replace(/[A-Za-z]/g, "_ ") });
+                io.to(socket.roomID).emit("startTimer", { time: time });
                 io.to(player).emit("newWord", { word: word });
                 io.to(prevPlayer).emit("disableCanvas");
                 await wait(time);
