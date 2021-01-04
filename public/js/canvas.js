@@ -17,12 +17,29 @@
     }
 
     socket.on('drawing', onDrawingEvent);
+    socket.on('clearCanvas', clearCanvas);
 
-    socket.on("newWord", ({ word }) => {
-        document.querySelector("#word").textContent = word;
+    socket.on("chooseWord", ([word1, word2, word3]) => {
+        var p = document.createElement('p');
+        var btn1 = document.createElement('button');
+        var btn2 = document.createElement('button');
+        var btn3 = document.createElement('button');
+        var text = document.createTextNode("Choose a word");
+        btn1.classList.add("btn", "btn-outline-success", "rounded-pill");
+        btn3.classList.add("btn", "btn-outline-success", "rounded-pill");
+        btn2.classList.add("btn", "btn-outline-success", "rounded-pill");
+        p.classList.add("lead", "fw-bold");
+        btn1.textContent = word1;
+        btn2.textContent = word2;
+        btn3.textContent = word3;
+        btn1.addEventListener("click", chooseWord);
+        btn2.addEventListener("click", chooseWord);
+        btn3.addEventListener("click", chooseWord);
+        p.append(text);
+        document.querySelector("#wordDiv").innerHTML = "";
+        document.querySelector("#wordDiv").append(p, btn1, btn2, btn3);
         enableCanvas();
     });
-
 
     socket.on("disableCanvas", disableCanvas);
 
@@ -105,6 +122,16 @@
         context.putImageData(contents, 0, 0);
     }
 
+    function chooseWord(e) {
+        e.preventDefault();
+        socket.emit("chooseWord", { word: this.textContent });
+        var p = document.createElement("p");
+        p.textContent = this.textContent;
+        p.classList.add("lead", "fw-bold", "mb-0");
+        document.querySelector("#wordDiv").innerHTML = "";
+        document.querySelector("#wordDiv").append(p);
+    }
+
     function enableCanvas() {
         canvas.addEventListener('mousedown', onMouseDown, false);
         canvas.addEventListener('mouseup', onMouseUp, false);
@@ -116,6 +143,10 @@
         canvas.addEventListener('touchend', onMouseUp, false);
         canvas.addEventListener('touchcancel', onMouseUp, false);
         canvas.addEventListener('touchmove', throttle(onMouseMove, 10), false);
+    }
+
+    function clearCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     function disableCanvas() {
