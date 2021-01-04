@@ -30,7 +30,6 @@ io.on('connection', socket => {
         }
         console.log(games);
         socket.player = player;
-        socket.player.id = socket.id;
         socket.roomID = id;
         socket.join(id);
         socket.emit('newPrivateRoom', { gameID: id });
@@ -38,7 +37,6 @@ io.on('connection', socket => {
 
     socket.on("joinRoom", async function (data) {
         socket.player = data.player;
-        data.player.id = socket.id;
         socket.join(data.id);
         const roomID = Array.from(socket.rooms)[1];
         socket.roomID = roomID;
@@ -75,13 +73,13 @@ io.on('connection', socket => {
             for (let i = 0; i < players.length; i++) {
                 const player = players[i];
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
-                var index = Math.floor(Math.random() * (words.length + 1));
-                var word = words[index];
-                console.log(`sent word: ${word}`);
-                io.to(socket.roomID).emit("hideWord", { word: word.replace(/[A-Za-z]/g, "_ ") });
-                io.to(socket.roomID).emit("startTimer", { time: time });
-                io.to(player).emit("newWord", { word: word });
+                io.to(socket.roomID).emit("choosing", { name: io.of("/").sockets.get(player).player.name })
+                io.to(player).emit("chooseWord", get3Words());
+                var word = await chosenWord(player);
+                games[socket.roomID].currentWord = word;
                 io.to(prevPlayer).emit("disableCanvas");
+                io.to(socket.roomID).emit("clearCanvas");
+                io.to(socket.roomID).emit("startTimer", { time: time });
                 await wait(time);
             }
             await wait(2000);
@@ -113,4 +111,24 @@ io.on('connection', socket => {
 
 function wait(ms) {
     return new Promise(res => setTimeout(res, ms));
+}
+
+function get3Words() {
+    var arr = [];
+    for (let i = 0; i < 3; i++) {
+        var index = Math.floor(Math.random() * (words.length + 1));
+        var word = words[index];
+        arr.push(word);
+    }
+    return arr;
+}
+
+function chosenWord(playerID) {
+    return new Promise(resolve => {
+        const socket = io.of('/').sockets.get(playerID);
+        socket.on("chooseWord", ({ word }) => {
+            socket.to(socket.roomID).emit("hideWord", { word: word.replace(/[A-Za-z]/g, "_ ") });
+            resolve(word);
+        });
+    });
 }

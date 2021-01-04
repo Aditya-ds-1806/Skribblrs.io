@@ -8,7 +8,20 @@ socket.on("otherPlayers", players => players.forEach(player => putPlayer(player)
 socket.on("disconnection", player => document.querySelector(`#${player.id}`).remove());
 socket.on("startGame", showCanvasArea);
 socket.on("getPlayers", players => createScoreCard(players));
-socket.on("hideWord", ({ word }) => document.querySelector("#word").textContent = word);
+socket.on("choosing", ({ name }) => {
+    var p = document.createElement('p');
+    p.textContent = `${name} is choosing a word`;
+    p.classList.add("lead", "fw-bold", "mb-0");
+    document.querySelector("#wordDiv").innerHTML = "";
+    document.querySelector("#wordDiv").append(p);
+});
+socket.on("hideWord", ({ word }) => {
+    var p = document.createElement('p');
+    p.textContent = word;
+    p.classList.add("lead", "fw-bold", "mb-0");
+    document.querySelector("#wordDiv").innerHTML = "";
+    document.querySelector("#wordDiv").append(p);
+});
 socket.on("startTimer", ({ time }) => startTimer(time));
 
 socket.on("message", ({ name, message }) => {
@@ -126,6 +139,7 @@ document.querySelector("#createRoom").addEventListener('click', function () {
     document.querySelector("#landing").classList.add("d-none");
     document.querySelector("#settings").classList.remove("d-none");
     if (!searchParams.has("id")) {
+        my.id = socket.id;
         socket.emit("newPrivateRoom", my);
         socket.on("newPrivateRoom", function (data) {
             document.querySelector("#gameLink").value = `${location.protocol}//${location.host}/?id=${data.gameID}`;
@@ -137,6 +151,7 @@ document.querySelector("#createRoom").addEventListener('click', function () {
 document.querySelector("#playGame").addEventListener("click", function () {
     document.querySelector("#landing").classList.add("d-none");
     document.querySelector("#settings").classList.remove("d-none");
+    my.id = socket.id;
     if (searchParams.has("id")) {
         document.querySelector("#gameLink").value = `${location.protocol}//${location.host}/?id=${searchParams.get("id")}`;
         putPlayer(my);
