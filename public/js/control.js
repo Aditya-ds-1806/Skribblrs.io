@@ -115,7 +115,11 @@ function startTimer(ms) {
         if (secs === 0) clearInterval(id);
         document.querySelector("#clock").textContent = secs;
         secs--;
-    }, 1000)
+    }, 1000);
+    socket.on("choosing", () => {
+        clearInterval(id);
+        document.querySelector("#clock").textContent = 0;
+    });
 }
 
 function showCanvasArea() {
