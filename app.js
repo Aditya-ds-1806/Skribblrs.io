@@ -73,16 +73,15 @@ io.on('connection', socket => {
             for (let i = 0; i < players.length; i++) {
                 const player = players[i];
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
+                io.to(prevPlayer).emit("disableCanvas");
                 io.to(socket.roomID).emit("choosing", { name: io.of("/").sockets.get(player).player.name })
                 io.to(player).emit("chooseWord", get3Words());
                 var word = await chosenWord(player);
                 games[socket.roomID].currentWord = word;
-                io.to(prevPlayer).emit("disableCanvas");
                 io.to(socket.roomID).emit("clearCanvas");
                 io.to(socket.roomID).emit("startTimer", { time: time });
                 await wait(time);
             }
-            await wait(2000);
         }
     });
 

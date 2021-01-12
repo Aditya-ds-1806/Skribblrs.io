@@ -38,7 +38,6 @@
         p.append(text);
         document.querySelector("#wordDiv").innerHTML = "";
         document.querySelector("#wordDiv").append(p, btn1, btn2, btn3);
-        enableCanvas();
     });
 
     socket.on("disableCanvas", disableCanvas);
@@ -124,6 +123,7 @@
 
     function chooseWord(e) {
         e.preventDefault();
+        enableCanvas();
         socket.emit("chooseWord", { word: this.textContent });
         var p = document.createElement("p");
         p.textContent = this.textContent;
