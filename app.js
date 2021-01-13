@@ -55,8 +55,8 @@ io.on('connection', socket => {
     });
 
     socket.on("settingsUpdate", data => {
-        games[socket.roomID].time = data.time;
-        games[socket.roomID].rounds = data.rounds;
+        games[socket.roomID].time = Number(data.time) * 1000;
+        games[socket.roomID].rounds = Number(data.rounds);
         socket.to(socket.roomID).emit("settingsUpdate", data);
     });
 

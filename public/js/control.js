@@ -60,8 +60,8 @@ if (searchParams.has("id")) {
 function updateSettings(e) {
     e.preventDefault();
     socket.emit("settingsUpdate", {
-        rounds: Number(document.querySelector("#rounds").value),
-        time: Number(document.querySelector("#time").value) * 1000
+        rounds: document.querySelector("#rounds").value,
+        time: document.querySelector("#time").value
     });
 }
 
