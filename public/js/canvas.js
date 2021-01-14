@@ -25,9 +25,9 @@
         var btn2 = document.createElement('button');
         var btn3 = document.createElement('button');
         var text = document.createTextNode("Choose a word");
-        btn1.classList.add("btn", "btn-outline-success", "rounded-pill");
-        btn3.classList.add("btn", "btn-outline-success", "rounded-pill");
-        btn2.classList.add("btn", "btn-outline-success", "rounded-pill");
+        btn1.classList.add("btn", "btn-outline-success", "rounded-pill", "mx-2");
+        btn3.classList.add("btn", "btn-outline-success", "rounded-pill", "mx-2");
+        btn2.classList.add("btn", "btn-outline-success", "rounded-pill", "mx-2");
         p.classList.add("lead", "fw-bold");
         btn1.textContent = word1;
         btn2.textContent = word2;
