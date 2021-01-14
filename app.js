@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const socket = require('socket.io');
 const { nanoid } = require('nanoid');
+const leven = require('leven');
 const words = JSON.parse(readFileSync('words.json').toString('utf-8'));
 var games = {};
 
@@ -73,6 +74,7 @@ io.on('connection', socket => {
             for (let i = 0; i < players.length; i++) {
                 const player = players[i];
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
+                games[socket.roomID].currentWord = "";
                 io.to(prevPlayer).emit("disableCanvas");
                 io.to(socket.roomID).emit("choosing", { name: io.of("/").sockets.get(player).player.name })
                 io.to(player).emit("chooseWord", get3Words());
@@ -96,8 +98,19 @@ io.on('connection', socket => {
     });
 
     socket.on("message", data => {
+        if (data.message.trim() === "") return;
+        const currentWord = games[socket.roomID].currentWord.toLowerCase();
+        const distance = leven(data.message.toLowerCase(), currentWord);
         data.name = socket.player.name;
-        io.in(socket.roomID).emit("message", data);
+        if (distance == 0) {
+            socket.emit("message", data);
+            if (currentWord !== "") socket.emit("correctGuess");
+        } else if (distance < 3) {
+            io.in(socket.roomID).emit("message", data);
+            if (currentWord !== "") socket.emit("closeGuess");
+        } else {
+            io.in(socket.roomID).emit("message", data);
+        }
     });
 
     socket.on("disconnect", reason => {
