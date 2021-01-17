@@ -75,6 +75,7 @@ io.on('connection', socket => {
                 const player = players[i];
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
                 games[socket.roomID].currentWord = "";
+                games[socket.roomID].drawer = player;
                 io.to(prevPlayer).emit("disableCanvas");
                 io.to(socket.roomID).emit("choosing", { name: io.of("/").sockets.get(player).player.name })
                 io.to(player).emit("chooseWord", get3Words());
@@ -102,12 +103,12 @@ io.on('connection', socket => {
         const currentWord = games[socket.roomID].currentWord.toLowerCase();
         const distance = leven(data.message.toLowerCase(), currentWord);
         data.name = socket.player.name;
-        if (distance == 0) {
+        if (distance === 0) {
             socket.emit("message", data);
-            if (currentWord !== "") socket.emit("correctGuess");
+            if (currentWord !== "" && games[socket.roomID].drawer !== socket.id) socket.emit("correctGuess");
         } else if (distance < 3) {
             io.in(socket.roomID).emit("message", data);
-            if (currentWord !== "") socket.emit("closeGuess");
+            if (currentWord !== "" && games[socket.roomID].drawer !== socket.id) socket.emit("closeGuess");
         } else {
             io.in(socket.roomID).emit("message", data);
         }
