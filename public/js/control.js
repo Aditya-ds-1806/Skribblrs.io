@@ -10,7 +10,6 @@ socket.on("startGame", showCanvasArea);
 socket.on("getPlayers", players => createScoreCard(players));
 socket.on("choosing", ({ name }) => {
     var p = document.createElement('p');
-    socket.hasGuessed = false;
     p.textContent = `${name} is choosing a word`;
     p.classList.add("lead", "fw-bold", "mb-0");
     document.querySelector("#wordDiv").innerHTML = "";
@@ -34,24 +33,19 @@ socket.on("message", ({ name, message }) => {
 });
 
 socket.on("closeGuess", () => {
-    if (!socket.hasGuessed) {
-        var p = document.createElement("p");
-        var chat = document.createTextNode("That was very close!!!");
-        p.classList.add("p-2", "mb-0", "alert-warning");
-        p.append(chat);
-        document.querySelector(".messages").appendChild(p);
-    }
+    var p = document.createElement("p");
+    var chat = document.createTextNode("That was very close!!!");
+    p.classList.add("p-2", "mb-0", "alert-warning");
+    p.append(chat);
+    document.querySelector(".messages").appendChild(p);
 });
 
 socket.on("correctGuess", () => {
-    if (!socket.hasGuessed) {
-        var p = document.createElement("p");
-        var chat = document.createTextNode("You guessed it right!!!");
-        p.classList.add("p-2", "mb-0", "alert-success");
-        p.append(chat);
-        document.querySelector(".messages").appendChild(p);
-        socket.hasGuessed = true;
-    }
+    var p = document.createElement("p");
+    var chat = document.createTextNode("You guessed it right!!!");
+    p.classList.add("p-2", "mb-0", "alert-success");
+    p.append(chat);
+    document.querySelector(".messages").appendChild(p);
 });
 
 document.querySelector("#sendMessage").addEventListener("submit", function (e) {

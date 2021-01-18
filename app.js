@@ -74,6 +74,7 @@ io.on('connection', socket => {
             for (let i = 0; i < players.length; i++) {
                 const player = players[i];
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
+                resetGuessedFlag(players);
                 games[socket.roomID].currentWord = "";
                 games[socket.roomID].drawer = player;
                 io.to(prevPlayer).emit("disableCanvas");
@@ -103,12 +104,17 @@ io.on('connection', socket => {
         const currentWord = games[socket.roomID].currentWord.toLowerCase();
         const distance = leven(data.message.toLowerCase(), currentWord);
         data.name = socket.player.name;
-        if (distance === 0) {
+        if (distance === 0 && currentWord !== "") {
             socket.emit("message", data);
-            if (currentWord !== "" && games[socket.roomID].drawer !== socket.id) socket.emit("correctGuess");
-        } else if (distance < 3) {
+            if (games[socket.roomID].drawer !== socket.id && !socket.hasGuessed) {
+                socket.emit("correctGuess");
+                games[socket.roomID][socket.id].score += 100;
+                console.log(games);
+            };
+            socket.hasGuessed = true;
+        } else if (distance < 3 && currentWord !== "") {
             io.in(socket.roomID).emit("message", data);
-            if (currentWord !== "" && games[socket.roomID].drawer !== socket.id) socket.emit("closeGuess");
+            if (games[socket.roomID].drawer !== socket.id && !socket.hasGuessed) socket.emit("closeGuess");
         } else {
             io.in(socket.roomID).emit("message", data);
         }
@@ -121,6 +127,13 @@ io.on('connection', socket => {
         }
     });
 });
+
+function resetGuessedFlag(players) {
+    players.forEach(playerID => {
+        const player = io.of('/').sockets.get(playerID);
+        player.hasGuessed = false;
+    });
+}
 
 function wait(ms) {
     return new Promise(res => setTimeout(res, ms));
