@@ -107,7 +107,7 @@ function createScoreCard(players) {
         var p1 = document.createElement('p');
         var p2 = document.createElement('p');
         var name = document.createTextNode(player.name);
-        var score = document.createTextNode("Score: 100");
+        var score = document.createTextNode("Score: 0");
 
         img.src = player.avatar;
         img.classList.add("img-fluid");
