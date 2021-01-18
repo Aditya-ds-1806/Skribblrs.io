@@ -140,7 +140,7 @@ function startTimer(ms) {
 
 function showCanvasArea() {
     var script = document.createElement('script');
-    document.querySelector("#settings").classList.add("d-none");
+    document.querySelector("#settings").remove();
     document.querySelector("#gameZone").classList.remove("d-none");
     script.src = "js/canvas.js";
     document.body.append(script);
@@ -156,7 +156,7 @@ copyBtn.addEventListener('click', function (e) {
 });
 
 document.querySelector("#createRoom").addEventListener('click', function () {
-    document.querySelector("#landing").classList.add("d-none");
+    document.querySelector("#landing").remove();
     document.querySelector("#settings").classList.remove("d-none");
     if (!searchParams.has("id")) {
         my.id = socket.id;
@@ -169,7 +169,7 @@ document.querySelector("#createRoom").addEventListener('click', function () {
 });
 
 document.querySelector("#playGame").addEventListener("click", function () {
-    document.querySelector("#landing").classList.add("d-none");
+    document.querySelector("#landing").remove();
     document.querySelector("#settings").classList.remove("d-none");
     my.id = socket.id;
     if (searchParams.has("id")) {
