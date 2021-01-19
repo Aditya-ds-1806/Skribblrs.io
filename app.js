@@ -5,6 +5,7 @@ const socket = require('socket.io');
 const { nanoid } = require('nanoid');
 const leven = require('leven');
 const words = JSON.parse(readFileSync('words.json').toString('utf-8'));
+const MAX_POINTS = 500;
 var games = {};
 
 app.use(express.static('public'));
@@ -29,6 +30,8 @@ io.on('connection', socket => {
             rounds: 2,
             time: 40 * 1000
         }
+        games[id][socket.id] = {};
+        games[id][socket.id].score = 0;
         console.log(games);
         socket.player = player;
         socket.roomID = id;
@@ -53,6 +56,9 @@ io.on('connection', socket => {
                 return acc;
             }, [])
         );
+        games[roomID][socket.id] = {};
+        games[roomID][socket.id].score = 0;
+        console.log(games);
     });
 
     socket.on("settingsUpdate", data => {
@@ -75,6 +81,7 @@ io.on('connection', socket => {
                 const player = players[i];
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
                 resetGuessedFlag(players);
+                games[socket.roomID].startTime = Date.now() / 1000;
                 games[socket.roomID].currentWord = "";
                 games[socket.roomID].drawer = player;
                 io.to(prevPlayer).emit("disableCanvas");
@@ -107,9 +114,11 @@ io.on('connection', socket => {
         if (distance === 0 && currentWord !== "") {
             socket.emit("message", data);
             if (games[socket.roomID].drawer !== socket.id && !socket.hasGuessed) {
+                const startTime = games[socket.roomID].startTime;
+                const roundTime = games[socket.roomID].time;
                 socket.emit("correctGuess");
-                games[socket.roomID][socket.id].score += 100;
-                console.log(games);
+                games[socket.roomID][socket.id].score += getScore(startTime, roundTime);
+                io.in(socket.roomID).emit("updateScore", { playerID: socket.id, score: games[socket.roomID][socket.id].score });
             };
             socket.hasGuessed = true;
         } else if (distance < 3 && currentWord !== "") {
@@ -127,6 +136,13 @@ io.on('connection', socket => {
         }
     });
 });
+
+function getScore(startTime, roundTime) {
+    const now = Date.now() / 1000;
+    const elaspsedTime = now - startTime;
+    roundTime = roundTime / 1000;
+    return Math.floor(((roundTime - elaspsedTime) / roundTime) * MAX_POINTS);
+}
 
 function resetGuessedFlag(players) {
     players.forEach(playerID => {
