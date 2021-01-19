@@ -128,11 +128,12 @@ function createScoreCard(players) {
 
 function startTimer(ms) {
     var secs = ms / 1000;
-    var id = setInterval(function () {
+    var id = setInterval((function updateClock() {
         if (secs === 0) clearInterval(id);
         document.querySelector("#clock").textContent = secs;
         secs--;
-    }, 1000);
+        return updateClock;
+    })(), 1000);
     socket.on("choosing", () => {
         clearInterval(id);
         document.querySelector("#clock").textContent = 0;
