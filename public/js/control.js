@@ -5,7 +5,7 @@ var copyBtn = document.querySelector("#copy");
 
 socket.on("joinRoom", putPlayer);
 socket.on("otherPlayers", players => players.forEach(player => putPlayer(player)));
-socket.on("disconnection", player => document.querySelector(`#${player.id}`).remove());
+socket.on("disconnection", player => document.querySelector(`#skribblr-${player.id}`).remove());
 socket.on("startGame", showCanvasArea);
 socket.on("getPlayers", players => createScoreCard(players));
 socket.on("choosing", ({ name }) => {
@@ -86,7 +86,7 @@ function putPlayer(player) {
     var img = document.createElement("img");
     var p = document.createElement("p");
     var text = document.createTextNode(player.name);
-    div.id = player.id;
+    div.id = `skribblr-${player.id}`;
     p.appendChild(text);
     p.classList.add("text-center");
     img.src = player.avatar;
@@ -116,6 +116,7 @@ function createScoreCard(players) {
         details.classList.add("col-6", "text-center", "my-auto");
         p1.classList.add("mb-0");
         p2.classList.add("mb-0");
+        div.id = `skribblr-${player.id}`;
         div.append(details, avatar);
         avatar.append(img);
         details.append(p1, p2);
