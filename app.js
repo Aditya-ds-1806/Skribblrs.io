@@ -1,10 +1,13 @@
+const { EventEmitter } = require('events');
 const { readFileSync } = require('fs');
 const express = require('express');
 const app = express();
 const socket = require('socket.io');
 const { nanoid } = require('nanoid');
 const leven = require('leven');
+
 const words = JSON.parse(readFileSync('words.json').toString('utf-8'));
+const round = new EventEmitter();
 const MAX_POINTS = 500;
 const BONUS = 250;
 var games = {};
@@ -33,6 +36,7 @@ io.on('connection', socket => {
         }
         games[id][socket.id] = {};
         games[id][socket.id].score = 0;
+        games[id].totalPlayers = 1;
         console.log(games);
         socket.player = player;
         socket.roomID = id;
@@ -59,6 +63,7 @@ io.on('connection', socket => {
         );
         games[roomID][socket.id] = {};
         games[roomID][socket.id].score = 0;
+        games[roomID].totalPlayers++;
         console.log(games);
     });
 
@@ -83,6 +88,7 @@ io.on('connection', socket => {
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
                 resetGuessedFlag(players);
                 games[socket.roomID].startTime = Date.now() / 1000;
+                games[socket.roomID].totalGuesses = 0;
                 games[socket.roomID].currentWord = "";
                 games[socket.roomID].drawer = player;
                 io.to(prevPlayer).emit("disableCanvas");
@@ -119,6 +125,7 @@ io.on('connection', socket => {
                 const startTime = games[socket.roomID].startTime;
                 const roundTime = games[socket.roomID].time;
                 socket.emit("correctGuess");
+                games[socket.roomID].totalGuesses++;
                 games[socket.roomID][socket.id].score += getScore(startTime, roundTime);
                 games[socket.roomID][drawer.id].score += BONUS;
                 io.in(socket.roomID).emit("updateScore", {
@@ -127,6 +134,9 @@ io.on('connection', socket => {
                     drawerID: drawer.id,
                     drawerScore: games[socket.roomID][drawer.id].score
                 });
+                if (games[socket.roomID].totalGuesses === games[socket.roomID].totalPlayers - 1) {
+                    round.emit("everybodyGuessed");
+                }
             };
             socket.hasGuessed = true;
         } else if (distance < 3 && currentWord !== "") {
@@ -160,7 +170,10 @@ function resetGuessedFlag(players) {
 }
 
 function wait(ms) {
-    return new Promise(res => setTimeout(res, ms));
+    return new Promise(res => {
+        round.on("everybodyGuessed", res);
+        setTimeout(res, ms);
+    });
 }
 
 function get3Words() {
