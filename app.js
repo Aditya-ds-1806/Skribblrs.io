@@ -6,6 +6,7 @@ const { nanoid } = require('nanoid');
 const leven = require('leven');
 const words = JSON.parse(readFileSync('words.json').toString('utf-8'));
 const MAX_POINTS = 500;
+const BONUS = 250;
 var games = {};
 
 app.use(express.static('public'));
@@ -114,11 +115,18 @@ io.on('connection', socket => {
         if (distance === 0 && currentWord !== "") {
             socket.emit("message", data);
             if (games[socket.roomID].drawer !== socket.id && !socket.hasGuessed) {
+                const drawer = io.of('/').sockets.get(games[socket.roomID].drawer);
                 const startTime = games[socket.roomID].startTime;
                 const roundTime = games[socket.roomID].time;
                 socket.emit("correctGuess");
                 games[socket.roomID][socket.id].score += getScore(startTime, roundTime);
-                io.in(socket.roomID).emit("updateScore", { playerID: socket.id, score: games[socket.roomID][socket.id].score });
+                games[socket.roomID][drawer.id].score += BONUS;
+                io.in(socket.roomID).emit("updateScore", {
+                    playerID: socket.id,
+                    score: games[socket.roomID][socket.id].score,
+                    drawerID: drawer.id,
+                    drawerScore: games[socket.roomID][drawer.id].score
+                });
             };
             socket.hasGuessed = true;
         } else if (distance < 3 && currentWord !== "") {

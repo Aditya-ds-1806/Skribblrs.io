@@ -48,8 +48,9 @@ socket.on("correctGuess", () => {
     document.querySelector(".messages").appendChild(p);
 });
 
-socket.on("updateScore", ({ playerID, score }) => {
+socket.on("updateScore", ({ playerID, score, drawerID, drawerScore }) => {
     document.querySelector(`#skribblr-${playerID}>div p:last-child`).textContent = `Score: ${score}`;
+    document.querySelector(`#skribblr-${drawerID}>div p:last-child`).textContent = `Score: ${drawerScore}`;
 });
 
 document.querySelector("#sendMessage").addEventListener("submit", function (e) {
