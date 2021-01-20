@@ -36,7 +36,6 @@ io.on('connection', socket => {
         }
         games[id][socket.id] = {};
         games[id][socket.id].score = 0;
-        games[id].totalPlayers = 1;
         console.log(games);
         socket.player = player;
         socket.roomID = id;
@@ -63,7 +62,6 @@ io.on('connection', socket => {
         );
         games[roomID][socket.id] = {};
         games[roomID][socket.id].score = 0;
-        games[roomID].totalPlayers++;
         console.log(games);
     });
 
@@ -134,7 +132,7 @@ io.on('connection', socket => {
                     drawerID: drawer.id,
                     drawerScore: games[socket.roomID][drawer.id].score
                 });
-                if (games[socket.roomID].totalGuesses === games[socket.roomID].totalPlayers - 1) {
+                if (games[socket.roomID].totalGuesses === io.of("/").sockets.size - 1) {
                     round.emit("everybodyGuessed");
                 }
             };
