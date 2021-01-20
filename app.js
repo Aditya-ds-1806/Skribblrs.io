@@ -87,7 +87,6 @@ io.on('connection', socket => {
                 const player = players[i];
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
                 resetGuessedFlag(players);
-                games[socket.roomID].startTime = Date.now() / 1000;
                 games[socket.roomID].totalGuesses = 0;
                 games[socket.roomID].currentWord = "";
                 games[socket.roomID].drawer = player;
@@ -97,6 +96,7 @@ io.on('connection', socket => {
                 var word = await chosenWord(player);
                 games[socket.roomID].currentWord = word;
                 io.to(socket.roomID).emit("clearCanvas");
+                games[socket.roomID].startTime = Date.now() / 1000;
                 io.to(socket.roomID).emit("startTimer", { time: time });
                 await wait(time);
             }
@@ -157,9 +157,9 @@ io.on('connection', socket => {
 
 function getScore(startTime, roundTime) {
     const now = Date.now() / 1000;
-    const elaspsedTime = now - startTime;
+    const elapsedTime = now - startTime;
     roundTime = roundTime / 1000;
-    return Math.floor(((roundTime - elaspsedTime) / roundTime) * MAX_POINTS);
+    return Math.floor(((roundTime - elapsedTime) / roundTime) * MAX_POINTS);
 }
 
 function resetGuessedFlag(players) {
