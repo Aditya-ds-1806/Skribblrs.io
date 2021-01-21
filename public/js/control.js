@@ -15,6 +15,28 @@ socket.on("choosing", ({ name }) => {
     document.querySelector("#wordDiv").innerHTML = "";
     document.querySelector("#wordDiv").append(p);
 });
+
+socket.on("chooseWord", ([word1, word2, word3]) => {
+    var p = document.createElement('p');
+    var btn1 = document.createElement('button');
+    var btn2 = document.createElement('button');
+    var btn3 = document.createElement('button');
+    var text = document.createTextNode("Choose a word");
+    btn1.classList.add("btn", "btn-outline-success", "rounded-pill", "mx-2");
+    btn3.classList.add("btn", "btn-outline-success", "rounded-pill", "mx-2");
+    btn2.classList.add("btn", "btn-outline-success", "rounded-pill", "mx-2");
+    p.classList.add("lead", "fw-bold");
+    btn1.textContent = word1;
+    btn2.textContent = word2;
+    btn3.textContent = word3;
+    btn1.addEventListener("click", chooseWord);
+    btn2.addEventListener("click", chooseWord);
+    btn3.addEventListener("click", chooseWord);
+    p.append(text);
+    document.querySelector("#wordDiv").innerHTML = "";
+    document.querySelector("#wordDiv").append(p, btn1, btn2, btn3);
+});
+
 socket.on("hideWord", ({ word }) => {
     var p = document.createElement('p');
     p.textContent = word;
@@ -86,6 +108,17 @@ function updateSettings(e) {
     });
 }
 
+function chooseWord(e) {
+    e.preventDefault();
+    pad.setReadOnly(false);
+    socket.emit("chooseWord", { word: this.textContent });
+    var p = document.createElement("p");
+    p.textContent = this.textContent;
+    p.classList.add("lead", "fw-bold", "mb-0");
+    document.querySelector("#wordDiv").innerHTML = "";
+    document.querySelector("#wordDiv").append(p);
+}
+
 function putPlayer(player) {
     var div = document.createElement("div");
     var img = document.createElement("img");
@@ -146,14 +179,16 @@ function startTimer(ms) {
 }
 
 function showCanvasArea() {
-    var script = document.createElement('script');
+    var sketchpad = document.createElement('script');
+    var config = document.createElement('script');
     document.querySelector("#settings").remove();
     document.querySelector("#gameZone").classList.remove("d-none");
-    script.src = "js/canvas.js";
-    document.body.append(script);
+    sketchpad.src = "https://cdn.jsdelivr.net/npm/responsive-sketchpad/dist/sketchpad.min.js";
+    config.src = "js/canvas.js";
+    document.body.append(sketchpad, config);
     return new Promise((res) => {
-        script.addEventListener('load', e => res());
-    })
+        sketchpad.addEventListener('load', e => res());
+    });
 }
 
 copyBtn.addEventListener('click', function (e) {
