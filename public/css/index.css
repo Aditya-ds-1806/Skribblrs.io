@@ -15,9 +15,7 @@ body {
 
 /* canvas */
 
-.whiteboard {
-    height: 30em;
-    width: 40em;
+canvas {
     background-color: #fff;
 }
 
