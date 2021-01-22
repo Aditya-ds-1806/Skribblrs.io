@@ -118,14 +118,50 @@
         </div>
         <div class="row justify-content-center mx-0">
             <div class="col-2 h-100 players"></div>
-            <div class="col-7 h-100 text-center">
+            <div class="col-7 h-100 d-flex flex-column">
                 <div id="sketchpad"></div>
-                <div class="d-flex colors justify-content-center">
-                    <div class="color black mx-1"></div>
-                    <div class="color red mx-1"></div>
-                    <div class="color green mx-1"></div>
-                    <div class="color blue mx-1"></div>
-                    <div class="color yellow mx-1"></div>
+                <div class="row mx-0">
+                    <div class="col-1 px-0">
+                        <div class="selected-color"></div>
+                    </div>
+                    <div class="col-5 px-0">
+                        <div class="d-inline-flex align-top">
+                            <div class="color white" role="button"></div>
+                            <div class="color grey1" role="button"></div>
+                            <div class="color red1" role="button"></div>
+                            <div class="color orange1" role="button"></div>
+                            <div class="color yellow1" role="button"></div>
+                            <div class="color green1" role="button"></div>
+                            <div class="color skyblue1" role="button"></div>
+                            <div class="color blue1" role="button"></div>
+                            <div class="color purple1" role="button"></div>
+                            <div class="color pink1" role="button"></div>
+                            <div class="color brown1" role="button"></div>
+                        </div>
+                        <div class="d-inline-flex">
+                            <div class="color black" role="button"></div>
+                            <div class="color grey2" role="button"></div>
+                            <div class="color red2" role="button"></div>
+                            <div class="color orange2" role="button"></div>
+                            <div class="color yellow2" role="button"></div>
+                            <div class="color green2" role="button"></div>
+                            <div class="color skyblue2" role="button"></div>
+                            <div class="color blue2" role="button"></div>
+                            <div class="color purple2" role="button"></div>
+                            <div class="color pink2" role="button"></div>
+                            <div class="color brown2" role="button"></div>
+                        </div>
+                    </div>
+                    <div class="col-6 text-end px-0">
+                        <img src="/images/brush-sm.png" id="sm-brush" data-linesize="5" role="button" alt="small brush">
+                        <img src="/images/brush-md.png" id="md-brush" data-linesize="10" role="button"
+                            alt="medium brush">
+                        <img src="/images/brush-lg.png" id="lg-brush" data-linesize="15" role="button"
+                            alt="large brush">
+                        <img src="/images/brush-xl.png" id="xl-brush" data-linesize="20" role="button"
+                            alt="extra large brush">
+                        <img src="/images/delete.png" id="clearCanvas" role="button" alt="clear canvas">
+                    </div>
                 </div>
             </div>
             <div class="col-3 h-100 bg-white p-0">
