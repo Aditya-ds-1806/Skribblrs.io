@@ -185,9 +185,12 @@ function showCanvasArea() {
     document.querySelector("#gameZone").classList.remove("d-none");
     sketchpad.src = "https://cdn.jsdelivr.net/npm/responsive-sketchpad/dist/sketchpad.min.js";
     config.src = "js/canvas.js";
-    document.body.append(sketchpad, config);
+    document.body.append(sketchpad);
     return new Promise((res) => {
-        sketchpad.addEventListener('load', e => res());
+        sketchpad.addEventListener('load', e => {
+            document.body.append(config);
+            res();
+        });
     });
 }
 
