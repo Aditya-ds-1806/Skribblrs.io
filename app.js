@@ -75,6 +75,10 @@ io.on('connection', socket => {
         socket.broadcast.to(socket.roomID).emit("drawing", data);
     });
 
+    socket.on("clearCanvas", () => {
+        socket.broadcast.to(socket.roomID).emit("clearCanvas");
+    });
+
     socket.on("startGame", async _ => {
         socket.to(socket.roomID).emit("startGame");
         var time = games[socket.roomID].time;
