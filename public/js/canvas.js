@@ -17,7 +17,7 @@ for (var i = 0; i < colors.length; i++) {
 }
 
 window.addEventListener('resize', () => pad.resize(canvas.offsetWidth));
-canvas.addEventListener('mousemove', () => throttle(onMouseMove, 10), false);
+canvas.addEventListener('mousemove', throttle(onMouseMove, 10));
 
 socket.on('clearCanvas', () => pad.clear());
 socket.on('drawing', data => pad.loadJSON(data));
