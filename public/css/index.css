@@ -17,32 +17,110 @@ body {
 
 canvas {
     background-color: #fff;
+    cursor: crosshair;
 }
+
+/* colors */
 
 .color {
     display: inline-block;
-    height: 48px;
-    width: 48px;
+    height: 25px;
+    width: 25px;
 }
 
-.color.black {
-    background-color: black;
+.selected-color {
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+    background-color: #000;
 }
 
-.color.red {
-    background-color: red;
+.white {
+    background-color: #fff;
 }
 
-.color.green {
-    background-color: green;
+.black {
+    background-color: #000;
 }
 
-.color.blue {
-    background-color: blue;
+.grey1 {
+    background-color: #c1c1c1;
 }
 
-.color.yellow {
-    background-color: yellow;
+.grey2 {
+    background-color: rgb(76, 76, 76);
+}
+
+.red1 {
+    background-color: rgb(239, 19, 11);
+}
+
+.red2 {
+    background-color: rgb(116, 11, 7);
+}
+
+.orange1 {
+    background-color: rgb(255, 113, 0);
+}
+
+.orange2 {
+    background-color: rgb(194, 56, 0);
+}
+
+.yellow1 {
+    background-color: rgb(255, 228, 0);
+}
+
+.yellow2 {
+    background-color: rgb(232, 162, 0);
+}
+
+.green1 {
+    background-color: rgb(0, 204, 0);
+}
+
+.green2 {
+    background-color: rgb(0, 85, 16);
+}
+
+.skyblue1 {
+    background-color: rgb(0, 178, 255);
+}
+
+.skyblue2 {
+    background-color: rgb(0, 86, 158);
+}
+
+.blue1 {
+    background-color: rgb(35, 31, 211);
+}
+
+.blue2 {
+    background-color: rgb(14, 8, 101);
+}
+
+.purple1 {
+    background-color: rgb(163, 0, 186);
+}
+
+.purple2 {
+    background-color: rgb(85, 0, 105);
+}
+
+.pink1 {
+    background-color: rgb(211, 124, 170);
+}
+
+.pink2 {
+    background-color: rgb(167, 85, 116);
+}
+
+.brown1 {
+    background-color: rgb(160, 82, 45);
+}
+
+.brown2 {
+    background-color: rgb(99, 48, 13);
 }
 
 /* players */
