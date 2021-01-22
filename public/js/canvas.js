@@ -12,10 +12,6 @@ colors.forEach(color => {
     color.addEventListener('click', e => pad.setLineColor(e.target.className.split(' ')[1], false));
 })
 
-for (var i = 0; i < colors.length; i++) {
-    colors[i].addEventListener('click', e => pad.setLineColor(e.target.className.split(' ')[1], false));
-}
-
 window.addEventListener('resize', () => pad.resize(canvas.offsetWidth));
 canvas.addEventListener('mousemove', throttle(onMouseMove, 10));
 
