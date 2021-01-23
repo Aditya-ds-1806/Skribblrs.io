@@ -1,0 +1,55 @@
+<section class="container d-none" id="settings">
+    <div class="row justify-content-between">
+        <div class="col-6 bg-white rounded h-100 p-3">
+            <h1 class="text-center">Settings</h1>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="rounds">Rounds</label>
+                <select class="form-select" id="rounds">
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="time">Draw time in seconds</label>
+                <select class="form-select" id="time">
+                    <option value="30">30</option>
+                    <option value="40" selected>40</option>
+                    <option value="50">50</option>
+                    <option value="60">60</option>
+                    <option value="70">70</option>
+                    <option value="80">80</option>
+                    <option value="90">90</option>
+                    <option value="100">100</option>
+                    <option value="110">110</option>
+                    <option value="120">120</option>
+                    <option value="130">130</option>
+                    <option value="140">140</option>
+                    <option value="150">150</option>
+                    <option value="160">160</option>
+                    <option value="170">170</option>
+                    <option value="180">180</option>
+                </select>
+            </div>
+            <button class="btn btn-primary w-100" id="startGame">Start Game</button>
+        </div>
+        <div class="col-6 text-white h-100 p-3">
+            <h1 class="text-center">Players</h1>
+            <div class="row mt-4 mx-0" style="height: 20em; overflow-y: auto;" id="playersDiv"></div>
+        </div>
+    </div>
+    <div class="mt-5">
+        <h1 class="text-white text-center">Invite your friends!</h1>
+        <div class="input-group mb-3">
+            <input type="text" id="gameLink" class="form-control text-center fw-bold bg-white"
+                value="https://skribbl.io/?id=Mlvx2dGgjqi1" readonly>
+            <button class="btn btn-warning" type="button" id="copy">Copy Link</button>
+        </div>
+    </div>
+</section>

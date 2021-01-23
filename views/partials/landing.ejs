@@ -1,0 +1,39 @@
+<section class="container" id="landing">
+    <div class="row justify-content-center">
+        <div class="col-6 bg-white rounded p-3">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="playerName" placeholder="Name" required>
+                <label for="playerName">Name</label>
+            </div>
+            <div class="row mx-0">
+                <div class="col-5">
+                    <img id="avatar" class="img-fluid" src="https://avatars.dicebear.com/4.5/api/avataaars/.svg"
+                        alt="Avatar">
+                </div>
+                <div class="col-7">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="style">Style</label>
+                        <select class="form-select" id="style">
+                            <option value="Avataaars" selected>Avataaars</option>
+                            <option value="Bottts">Bottts</option>
+                            <option value="Female">Female</option>
+                            <option value="Gridy">Gridy</option>
+                            <option value="Human">Human</option>
+                            <option value="Identicon">Identicon</option>
+                            <option value="Initials">Initials</option>
+                            <option value="Jdenticon">Jdenticon</option>
+                            <option value="Male">Male</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="bgColor" class="form-label">Background Color</label>
+                        <input type="color" class="form-control form-control-color" id="bgColor" value="#FFFFFF"
+                            title="Choose your color">
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-3" id="createRoom">Create Private Room</button>
+                <button class="btn btn-success mt-3 disabled" id="playGame">Play</button>
+            </div>
+        </div>
+    </div>
+</section>
