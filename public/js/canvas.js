@@ -48,11 +48,11 @@ socket.on('drawing', ({ start, end, lineColor, lineSize }) => {
     start.y *= h;
     end.x *= w;
     end.y *= h;
-    current.lineColor = lineColor;
-    current.lineSize = lineSize;
+    pad.setLineColor(lineColor);
+    pad.setLineSize(lineSize);
+    pad.drawLine(start, end);
     pad.setLineColor(current.lineColor);
     pad.setLineSize(current.lineSize);
-    pad.drawLine(start, end);
 });
 socket.on("disableCanvas", () => pad.setReadOnly(true));
 
