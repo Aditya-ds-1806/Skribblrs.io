@@ -12,6 +12,12 @@ style.addEventListener('input', updateAvatar);
 bgColor.addEventListener('input', updateAvatar);
 playerName.addEventListener('change', updateAvatar);
 
+const settings = document.createElement('script');
+const game = document.createElement('script');
+settings.src = "js/settings.js";
+game.src = "js/game.js";
+document.body.append(settings, game);
+
 function updateAvatar() {
     const sprite = style.value.toLowerCase();
     const color = bgColor.value.substring(1);

@@ -1,12 +1,3 @@
-var socket = io();
-var params = location.toString().substring(location.toString().indexOf('?'));
-var searchParams = new URLSearchParams(params);
-var copyBtn = document.querySelector("#copy");
-
-socket.on("joinRoom", putPlayer);
-socket.on("otherPlayers", players => players.forEach(player => putPlayer(player)));
-socket.on("disconnection", player => document.querySelector(`#skribblr-${player.id}`).remove());
-socket.on("startGame", showCanvasArea);
 socket.on("getPlayers", players => createScoreCard(players));
 socket.on("choosing", ({ name }) => {
     var p = document.createElement('p');
@@ -14,6 +5,11 @@ socket.on("choosing", ({ name }) => {
     p.classList.add("lead", "fw-bold", "mb-0");
     document.querySelector("#wordDiv").innerHTML = "";
     document.querySelector("#wordDiv").append(p);
+});
+
+socket.on("settingsUpdate", data => {
+    document.querySelector("#rounds").value = data.rounds;
+    document.querySelector("#time").value = data.time;
 });
 
 socket.on("chooseWord", ([word1, word2, word3]) => {
@@ -81,33 +77,7 @@ document.querySelector("#sendMessage").addEventListener("submit", function (e) {
     const message = this.firstElementChild.value;
     this.firstElementChild.value = "";
     socket.emit("message", { message: message });
-})
-
-if (searchParams.has("id")) {
-    // player
-    document.querySelector("#playGame").classList.remove('disabled');
-    document.querySelector("#createRoom").classList.add('disabled');
-    document.querySelector("#rounds").setAttribute('disabled', true);
-    document.querySelector("#time").setAttribute('disabled', true);
-    document.querySelector("#startGame").setAttribute('disabled', true);
-
-    socket.on("settingsUpdate", data => {
-        document.querySelector("#rounds").value = data.rounds;
-        document.querySelector("#time").value = data.time;
-    });
-} else {
-    // room owner
-    document.querySelector("#rounds").addEventListener('input', updateSettings);
-    document.querySelector("#time").addEventListener('input', updateSettings);
-}
-
-function updateSettings(e) {
-    e.preventDefault();
-    socket.emit("settingsUpdate", {
-        rounds: document.querySelector("#rounds").value,
-        time: document.querySelector("#time").value
-    });
-}
+});
 
 function chooseWord(e) {
     e.preventDefault();
@@ -118,23 +88,6 @@ function chooseWord(e) {
     p.classList.add("lead", "fw-bold", "mb-0");
     document.querySelector("#wordDiv").innerHTML = "";
     document.querySelector("#wordDiv").append(p);
-}
-
-function putPlayer(player) {
-    var div = document.createElement("div");
-    var img = document.createElement("img");
-    var p = document.createElement("p");
-    var text = document.createTextNode(player.name);
-    div.id = `skribblr-${player.id}`;
-    p.appendChild(text);
-    p.classList.add("text-center");
-    img.src = player.avatar;
-    img.alt = player.name;
-    img.classList.add("img-fluid");
-    div.classList.add("col-3");
-    div.appendChild(img);
-    div.appendChild(p);
-    document.querySelector("#playersDiv").appendChild(div);
 }
 
 function createScoreCard(players) {
@@ -178,55 +131,3 @@ function startTimer(ms) {
         document.querySelector("#clock").textContent = 0;
     });
 }
-
-function showCanvasArea() {
-    var sketchpad = document.createElement('script');
-    var config = document.createElement('script');
-    document.querySelector("#settings").remove();
-    document.querySelector("#gameZone").classList.remove("d-none");
-    sketchpad.src = "https://cdn.jsdelivr.net/npm/responsive-sketchpad/dist/sketchpad.min.js";
-    config.src = "js/canvas.js";
-    document.body.append(sketchpad);
-    return new Promise((res) => {
-        sketchpad.addEventListener('load', e => {
-            document.body.append(config);
-            res();
-        });
-    });
-}
-
-copyBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    document.querySelector("#gameLink").select();
-    document.execCommand('copy');
-});
-
-document.querySelector("#createRoom").addEventListener('click', function () {
-    document.querySelector("#landing").remove();
-    document.querySelector("#settings").classList.remove("d-none");
-    if (!searchParams.has("id")) {
-        my.id = socket.id;
-        socket.emit("newPrivateRoom", my);
-        socket.on("newPrivateRoom", function (data) {
-            document.querySelector("#gameLink").value = `${location.protocol}//${location.host}/?id=${data.gameID}`;
-            putPlayer(my);
-        });
-    }
-});
-
-document.querySelector("#playGame").addEventListener("click", function () {
-    document.querySelector("#landing").remove();
-    document.querySelector("#settings").classList.remove("d-none");
-    my.id = socket.id;
-    if (searchParams.has("id")) {
-        document.querySelector("#gameLink").value = `${location.protocol}//${location.host}/?id=${searchParams.get("id")}`;
-        putPlayer(my);
-    }
-    socket.emit("joinRoom", { id: searchParams.get("id"), player: my });
-});
-
-document.querySelector("#startGame").addEventListener("click", async function () {
-    await showCanvasArea();
-    socket.emit("startGame");
-    socket.emit("getPlayers");
-});
