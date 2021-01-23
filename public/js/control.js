@@ -35,6 +35,7 @@ socket.on("chooseWord", ([word1, word2, word3]) => {
     p.append(text);
     document.querySelector("#wordDiv").innerHTML = "";
     document.querySelector("#wordDiv").append(p, btn1, btn2, btn3);
+    document.querySelector("#tools").classList.remove("d-none");
 });
 
 socket.on("hideWord", ({ word }) => {

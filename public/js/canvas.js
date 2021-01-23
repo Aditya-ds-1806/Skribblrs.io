@@ -54,7 +54,10 @@ socket.on('drawing', ({ start, end, lineColor, lineSize }) => {
     pad.setLineColor(current.lineColor);
     pad.setLineSize(current.lineSize);
 });
-socket.on("disableCanvas", () => pad.setReadOnly(true));
+socket.on("disableCanvas", () => {
+    pad.setReadOnly(true);
+    document.querySelector("#tools").classList.add('d-none');
+});
 
 
 function setLineSize(e) {
