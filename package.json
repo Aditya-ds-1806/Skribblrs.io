@@ -2,9 +2,9 @@
   "name": "skribbl",
   "version": "1.0.0",
   "description": "A clone of skribbl.io",
-  "main": "app.js",
+  "main": "./bin/www",
   "scripts": {
-    "start": "node app.js"
+    "start": "node ./bin/www"
   },
   "author": "Aditya D.S.",
   "license": "MIT",
