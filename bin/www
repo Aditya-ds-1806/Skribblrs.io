@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 
+const { EventEmitter } = require('events');
 const app = require('../app');
 const sockets = require('../sockets');
+
+global.round = new EventEmitter();
+global.games = {};
+global.BONUS = 250;
+global.MAX_POINTS = 500;
 
 const server = app.listen(process.env.PORT || 3000, process.env.IP, () => {
     console.log(`Server listening on port ${server.address().port}`);
