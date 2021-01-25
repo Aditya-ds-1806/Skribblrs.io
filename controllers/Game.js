@@ -89,7 +89,7 @@ class Game {
         }
     }
 
-    async getPlayer() {
+    async getPlayers() {
         const { io, socket } = this;
         const players = Array.from(await io.in(socket.roomID).allSockets());
         io.in(socket.roomID).emit('getPlayers',

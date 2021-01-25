@@ -15,7 +15,7 @@ module.exports.init = (server) => {
         socket.on('drawing', (data) => new Canvas(io, socket).broadcastDrawing(data));
         socket.on('clearCanvas', () => new Canvas(io, socket).clearCanvas());
         socket.on('startGame', async () => { await new Game(io, socket).startGame(); });
-        socket.on('getPlayers', async () => { await new Game(io, socket).getPlayer(); });
+        socket.on('getPlayers', async () => { await new Game(io, socket).getPlayers(); });
         socket.on('message', (data) => new Game(io, socket).onMessage(data));
         socket.on('disconnect', () => new Disconnect(io, socket).onDisconnect());
     });
