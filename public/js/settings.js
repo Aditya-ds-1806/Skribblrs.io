@@ -88,7 +88,7 @@ document.querySelector('#playGame').addEventListener('click', () => {
     socket.emit('joinRoom', { id: searchParams.get('id'), player: my });
 });
 
-document.querySelector('#startGame').addEventListener('click', async () => {
+document.querySelector('#startGame').addEventListener('click', () => {
     showCanvasArea();
     socket.emit('startGame');
     socket.emit('getPlayers');
