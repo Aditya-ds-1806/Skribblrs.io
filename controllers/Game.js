@@ -53,6 +53,7 @@ class Game {
                 await wait(time);
             }
         }
+        io.to(socket.roomID).emit('endGame', { stats: games[socket.roomID] });
     }
 
     onMessage(data) {
