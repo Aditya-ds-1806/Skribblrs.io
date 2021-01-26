@@ -16,6 +16,8 @@ class Room {
         };
         games[id][socket.id] = {};
         games[id][socket.id].score = 0;
+        games[id][socket.id].name = player.name;
+        games[id][socket.id].avatar = player.avatar;
         console.log(games);
         socket.player = player;
         socket.roomID = id;
@@ -29,6 +31,8 @@ class Room {
         const players = Array.from(await io.in(roomID).allSockets());
         games[roomID][socket.id] = {};
         games[roomID][socket.id].score = 0;
+        games[roomID][socket.id].name = data.player.name;
+        games[roomID][socket.id].avatar = data.player.avatar;
         socket.player = data.player;
         socket.join(roomID);
         socket.roomID = roomID;
