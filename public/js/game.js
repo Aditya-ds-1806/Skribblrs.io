@@ -1,5 +1,29 @@
-/* global socket, pad */
+/* global socket, pad, Howl */
 let intervalID = 0;
+
+const yourTurn = new Howl({
+    src: ['audio/your-turn.mp3'],
+});
+
+const clock = new Howl({
+    src: ['audio/clock.mp3'],
+});
+
+const correct = new Howl({
+    src: ['audio/correct.mp3'],
+});
+
+const gameOver = new Howl({
+    src: ['audio/gameover.mp3'],
+});
+
+const click = new Howl({
+    src: ['audio/click.mp3'],
+});
+
+document.querySelectorAll('button').forEach((button) => {
+    button.addEventListener('mousedown', () => click.play());
+});
 
 function chooseWord(e) {
     e.preventDefault();
@@ -44,15 +68,12 @@ function startTimer(ms) {
     let secs = ms / 1000;
     const id = setInterval((function updateClock() {
         if (secs === 0) clearInterval(id);
+        if (secs === 10) clock.play();
         document.querySelector('#clock').textContent = secs;
         secs--;
         return updateClock;
     }()), 1000);
     intervalID = id;
-    socket.on('choosing', () => {
-        clearInterval(id);
-        document.querySelector('#clock').textContent = 0;
-    });
 }
 
 socket.on('getPlayers', (players) => createScoreCard(players));
@@ -62,6 +83,9 @@ socket.on('choosing', ({ name }) => {
     p.classList.add('lead', 'fw-bold', 'mb-0');
     document.querySelector('#wordDiv').innerHTML = '';
     document.querySelector('#wordDiv').append(p);
+    document.querySelector('#clock').textContent = 0;
+    clearInterval(intervalID);
+    clock.stop();
 });
 
 socket.on('settingsUpdate', (data) => {
@@ -89,6 +113,10 @@ socket.on('chooseWord', ([word1, word2, word3]) => {
     document.querySelector('#wordDiv').innerHTML = '';
     document.querySelector('#wordDiv').append(p, btn1, btn2, btn3);
     document.querySelector('#tools').classList.remove('d-none');
+    document.querySelector('#clock').textContent = 0;
+    clearInterval(intervalID);
+    clock.stop();
+    yourTurn.play();
 });
 
 socket.on('hideWord', ({ word }) => {
@@ -122,6 +150,7 @@ socket.on('correctGuess', () => {
     p.classList.add('p-2', 'mb-0', 'alert-success');
     p.append(chat);
     document.querySelector('.messages').appendChild(p);
+    correct.play();
 });
 
 socket.on('updateScore', ({
@@ -169,6 +198,8 @@ socket.on('endGame', ({ stats }) => {
         row.append(imgDiv, nameDiv, scoreDiv);
         document.querySelector('#statsDiv').append(row, document.createElement('hr'));
     });
+    clock.stop();
+    gameOver.play();
 });
 
 // eslint-disable-next-line func-names
