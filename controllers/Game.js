@@ -38,12 +38,13 @@ class Game {
             for (let i = 0; i < players.length; i++) {
                 const player = players[i];
                 const prevPlayer = players[(i - 1 + players.length) % players.length];
+                const drawer = io.of('/').sockets.get(player);
                 this.resetGuessedFlag(players);
                 games[socket.roomID].totalGuesses = 0;
                 games[socket.roomID].currentWord = '';
                 games[socket.roomID].drawer = player;
                 io.to(prevPlayer).emit('disableCanvas');
-                io.to(socket.roomID).emit('choosing', { name: io.of('/').sockets.get(player).player.name });
+                drawer.broadcast.emit('choosing', { name: drawer.player.name });
                 io.to(player).emit('chooseWord', get3Words());
                 const word = await this.chosenWord(player);
                 games[socket.roomID].currentWord = word;
