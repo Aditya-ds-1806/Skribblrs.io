@@ -6,11 +6,17 @@ body {
 }
 
 #landing,
-#settings {
+#settings,
+#gameEnded {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+#statsDiv {
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 /* canvas */
