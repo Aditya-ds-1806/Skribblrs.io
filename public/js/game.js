@@ -1,4 +1,5 @@
 /* global socket, pad */
+let intervalID = 0;
 function chooseWord(e) {
     e.preventDefault();
     pad.setReadOnly(false);
@@ -46,6 +47,7 @@ function startTimer(ms) {
         secs--;
         return updateClock;
     }()), 1000);
+    intervalID = id;
     socket.on('choosing', () => {
         clearInterval(id);
         document.querySelector('#clock').textContent = 0;
@@ -129,6 +131,44 @@ socket.on('updateScore', ({
 }) => {
     document.querySelector(`#skribblr-${playerID}>div p:last-child`).textContent = `Score: ${score}`;
     document.querySelector(`#skribblr-${drawerID}>div p:last-child`).textContent = `Score: ${drawerScore}`;
+});
+
+socket.on('endGame', ({ stats }) => {
+    clearInterval(intervalID);
+    document.querySelector('#clock').textContent = 0;
+    document.querySelector('#gameZone').classList.add('d-none');
+    document.querySelector('#gameEnded').classList.remove('d-none');
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in stats) {
+        if (key.length === 20) {
+            const row = document.createElement('div');
+            const imgDiv = document.createElement('div');
+            const nameDiv = document.createElement('div');
+            const scoreDiv = document.createElement('div');
+            const name = document.createElement('p');
+            const score = document.createElement('p');
+            const avatar = new Image();
+
+            avatar.src = stats[key].avatar;
+            name.textContent = stats[key].name;
+            score.textContent = stats[key].score;
+
+            row.classList.add('row', 'mx-0', 'align-items-center');
+            imgDiv.classList.add('col-2', 'text-center');
+            nameDiv.classList.add('col-7', 'text-center');
+            scoreDiv.classList.add('col-3', 'text-center');
+            name.classList.add('display-6', 'fw-normal', 'mb-0');
+            score.classList.add('display-6', 'fw-normal', 'mb-0');
+
+            imgDiv.append(avatar);
+            nameDiv.append(name);
+            scoreDiv.append(score);
+            row.append(imgDiv, nameDiv, scoreDiv);
+            document.querySelector('#statsDiv').append(row, document.createElement('hr'));
+        }
+    }
+    console.log(stats);
 });
 
 // eslint-disable-next-line func-names
