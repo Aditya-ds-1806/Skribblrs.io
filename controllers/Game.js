@@ -59,9 +59,10 @@ class Game {
 
     onMessage(data) {
         const { io, socket } = this;
-        if (data.message.trim() === '') return;
+        const guess = data.message.toLowerCase().trim();
+        if (guess === '') return;
         const currentWord = games[socket.roomID].currentWord.toLowerCase();
-        const distance = leven(data.message.toLowerCase(), currentWord);
+        const distance = leven(guess, currentWord);
         if (distance === 0 && currentWord !== '') {
             socket.emit('message', { ...data, name: socket.player.name });
             if (games[socket.roomID].drawer !== socket.id && !socket.hasGuessed) {
