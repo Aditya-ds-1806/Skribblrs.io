@@ -143,3 +143,15 @@ div.players div.row:nth-of-type(2n+1) {
 .messages p:nth-of-type(2n) {
     background-color: rgba(207, 204, 204, 0.973);
 }
+
+.correct {
+    color: #0f5132;
+    background-color: #d1e7dd !important;
+    border-color: #badbcc;
+}
+
+.close {
+    color: #664d03;
+    background-color: #fff3cd !important;
+    border-color: #ffecb5;
+}

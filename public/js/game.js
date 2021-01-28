@@ -139,7 +139,7 @@ socket.on('message', ({ name, message }) => {
 socket.on('closeGuess', () => {
     const p = document.createElement('p');
     const chat = document.createTextNode('That was very close!!!');
-    p.classList.add('p-2', 'mb-0', 'alert-warning');
+    p.classList.add('p-2', 'mb-0', 'close');
     p.append(chat);
     document.querySelector('.messages').appendChild(p);
 });
@@ -147,7 +147,7 @@ socket.on('closeGuess', () => {
 socket.on('correctGuess', () => {
     const p = document.createElement('p');
     const chat = document.createTextNode('You guessed it right!!!');
-    p.classList.add('p-2', 'mb-0', 'alert-success');
+    p.classList.add('p-2', 'mb-0', 'correct');
     p.append(chat);
     document.querySelector('.messages').appendChild(p);
     correct.play();
