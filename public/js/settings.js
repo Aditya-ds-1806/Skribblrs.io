@@ -23,7 +23,7 @@ function putPlayer(player) {
     img.src = player.avatar;
     img.alt = player.name;
     img.classList.add('img-fluid');
-    div.classList.add('col-3');
+    div.classList.add('col-4', 'col-sm-3', 'col-md-4', 'col-lg-3');
     div.appendChild(img);
     div.appendChild(p);
     document.querySelector('#playersDiv').appendChild(div);
