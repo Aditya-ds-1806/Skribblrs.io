@@ -10,9 +10,11 @@ function getScore(startTime, roundtime) {
     return Math.floor(((roundTime - elapsedTime) / roundTime) * MAX_POINTS);
 }
 
-function wait(ms) {
+function wait(roomID, ms) {
     return new Promise((res) => {
-        round.once('everybodyGuessed', res);
+        round.on('everybodyGuessed', ({ roomID: callerRoomID }) => {
+            if (callerRoomID === roomID) res();
+        });
         setTimeout(res, ms);
     });
 }

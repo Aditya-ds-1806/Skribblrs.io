@@ -44,14 +44,14 @@ class Game {
                 games[socket.roomID].currentWord = '';
                 games[socket.roomID].drawer = player;
                 io.to(prevPlayer).emit('disableCanvas');
-                drawer.broadcast.emit('choosing', { name: drawer.player.name });
+                drawer.to(socket.roomID).broadcast.emit('choosing', { name: drawer.player.name });
                 io.to(player).emit('chooseWord', get3Words());
                 const word = await this.chosenWord(player);
                 games[socket.roomID].currentWord = word;
                 io.to(socket.roomID).emit('clearCanvas');
                 games[socket.roomID].startTime = Date.now() / 1000;
                 io.to(socket.roomID).emit('startTimer', { time });
-                await wait(time);
+                await wait(socket.roomID, time);
             }
         }
         io.to(socket.roomID).emit('endGame', { stats: games[socket.roomID] });
@@ -69,6 +69,7 @@ class Game {
                 const drawer = io.of('/').sockets.get(games[socket.roomID].drawer);
                 const { startTime } = games[socket.roomID];
                 const roundTime = games[socket.roomID].time;
+                const roomSize = io.sockets.adapter.rooms.get(socket.roomID).size;
                 socket.emit('correctGuess');
                 games[socket.roomID].totalGuesses++;
                 games[socket.roomID][socket.id].score += getScore(startTime, roundTime);
@@ -79,8 +80,8 @@ class Game {
                     drawerID: drawer.id,
                     drawerScore: games[socket.roomID][drawer.id].score,
                 });
-                if (games[socket.roomID].totalGuesses === io.of('/').sockets.size - 1) {
-                    round.emit('everybodyGuessed');
+                if (games[socket.roomID].totalGuesses === roomSize - 1) {
+                    round.emit('everybodyGuessed', { roomID: socket.roomID });
                 }
             }
             socket.hasGuessed = true;
