@@ -1,8 +1,12 @@
-/* global io, my */
+/* global io, my, Howl */
 const socket = io();
 const params = window.location.toString().substring(window.location.toString().indexOf('?'));
 const searchParams = new URLSearchParams(params);
 const copyBtn = document.querySelector('#copy');
+
+const pop = new Howl({
+    src: ['audio/pop.mp3'],
+});
 
 function updateSettings(e) {
     e.preventDefault();
@@ -27,6 +31,7 @@ function putPlayer(player) {
     div.appendChild(img);
     div.appendChild(p);
     document.querySelector('#playersDiv').appendChild(div);
+    if (my.name !== player.name) pop.play();
 }
 
 function showCanvasArea() {
