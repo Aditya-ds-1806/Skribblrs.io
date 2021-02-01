@@ -3,6 +3,7 @@ body {
     background-repeat: repeat;
     background-position: center;
     background-size: 250px;
+    overflow: hidden;
 }
 
 #landing,
