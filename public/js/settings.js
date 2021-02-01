@@ -8,6 +8,10 @@ const pop = new Howl({
     src: ['audio/pop.mp3'],
 });
 
+const exit = new Howl({
+    src: ['audio/exit.mp3'],
+});
+
 function animateCSS(element, animation, selector = true) {
     return new Promise((resolve) => {
         const animationName = `animate__${animation}`;
@@ -70,7 +74,11 @@ function showCanvasArea() {
 
 socket.on('joinRoom', putPlayer);
 socket.on('otherPlayers', (players) => players.forEach((player) => putPlayer(player)));
-socket.on('disconnection', (player) => document.querySelector(`#skribblr-${player.id}`).remove());
+socket.on('disconnection', async (player) => {
+    exit.play();
+    await animateCSS(`#skribblr-${player.id}`, 'fadeOutUp');
+    document.querySelector(`#skribblr-${player.id}`).remove();
+});
 socket.on('startGame', showCanvasArea);
 
 if (searchParams.has('id')) {
