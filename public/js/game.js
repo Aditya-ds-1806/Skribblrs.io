@@ -1,4 +1,4 @@
-/* global socket, pad, Howl */
+/* global socket, pad, Howl, animateCSS */
 let intervalID = 0;
 
 const yourTurn = new Howl({
@@ -93,7 +93,7 @@ socket.on('settingsUpdate', (data) => {
     document.querySelector('#time').value = data.time;
 });
 
-socket.on('chooseWord', ([word1, word2, word3]) => {
+socket.on('chooseWord', async ([word1, word2, word3]) => {
     const p = document.createElement('p');
     const btn1 = document.createElement('button');
     const btn2 = document.createElement('button');
@@ -113,6 +113,7 @@ socket.on('chooseWord', ([word1, word2, word3]) => {
     document.querySelector('#wordDiv').innerHTML = '';
     document.querySelector('#wordDiv').append(p, btn1, btn2, btn3);
     document.querySelector('#tools').classList.remove('d-none');
+    await animateCSS('#tools', 'fadeInUp');
     document.querySelector('#clock').textContent = 0;
     clearInterval(intervalID);
     clock.stop();
@@ -163,14 +164,14 @@ socket.on('updateScore', ({
     document.querySelector(`#skribblr-${drawerID}>div p:last-child`).textContent = `Score: ${drawerScore}`;
 });
 
-socket.on('endGame', ({ stats }) => {
+socket.on('endGame', async ({ stats }) => {
     let players = Object.keys(stats).filter((val) => val.length === 20);
     players = players.sort((id1, id2) => stats[id2].score - stats[id1].score);
 
     clearInterval(intervalID);
     document.querySelector('#clock').textContent = 0;
-    document.querySelector('#gameZone').classList.add('d-none');
-    document.querySelector('#gameEnded').classList.remove('d-none');
+    await animateCSS('#gameZone', 'fadeOutLeft');
+    document.querySelector('#gameZone').remove();
 
     players.forEach((playerID) => {
         const row = document.createElement('div');
@@ -200,6 +201,8 @@ socket.on('endGame', ({ stats }) => {
     });
     clock.stop();
     gameOver.play();
+    document.querySelector('#gameEnded').classList.remove('d-none');
+    animateCSS('#gameEnded>div', 'fadeInRight');
 });
 
 // eslint-disable-next-line func-names

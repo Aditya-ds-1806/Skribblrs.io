@@ -1,4 +1,4 @@
-/* global Sketchpad, socket */
+/* global Sketchpad, socket, animateCSS */
 const canvas = document.getElementById('sketchpad');
 const smBrush = document.getElementById('sm-brush');
 const mdBrush = document.getElementById('md-brush');
@@ -125,7 +125,8 @@ socket.on('drawing', ({
     pad.setLineColor(current.lineColor);
     pad.setLineSize(current.lineSize);
 });
-socket.on('disableCanvas', () => {
+socket.on('disableCanvas', async () => {
     pad.setReadOnly(true);
+    await animateCSS('#tools', 'fadeOutDown');
     document.querySelector('#tools').classList.add('d-none');
 });

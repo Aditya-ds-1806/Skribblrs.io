@@ -8,6 +8,21 @@ const pop = new Howl({
     src: ['audio/pop.mp3'],
 });
 
+function animateCSS(element, animation, selector = true) {
+    return new Promise((resolve) => {
+        const animationName = `animate__${animation}`;
+        const node = selector ? document.querySelector(element) : element;
+
+        node.classList.add('animate__animated', animationName);
+        function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove('animate__animated', animationName);
+            resolve('Animation ended');
+        }
+        node.addEventListener('animationend', handleAnimationEnd, { once: true });
+    });
+}
+
 function updateSettings(e) {
     e.preventDefault();
     socket.emit('settingsUpdate', {
@@ -28,21 +43,29 @@ function putPlayer(player) {
     img.alt = player.name;
     img.classList.add('img-fluid');
     div.classList.add('col-4', 'col-sm-3', 'col-md-4', 'col-lg-3');
-    div.appendChild(img);
-    div.appendChild(p);
-    document.querySelector('#playersDiv').appendChild(div);
-    if (my.name !== player.name) pop.play();
+    img.onload = async () => {
+        div.appendChild(img);
+        div.appendChild(p);
+        document.querySelector('#playersDiv').appendChild(div);
+        pop.play();
+        await animateCSS(div, 'fadeInDown', false);
+    };
 }
 
 function showCanvasArea() {
     const sketchpad = document.createElement('script');
     const canvas = document.createElement('script');
-    document.querySelector('#settings').remove();
-    document.querySelector('#gameZone').classList.remove('d-none');
     sketchpad.src = 'https://cdn.jsdelivr.net/npm/responsive-sketchpad/dist/sketchpad.min.js';
     canvas.src = 'js/canvas.js';
     document.body.append(sketchpad);
-    sketchpad.addEventListener('load', () => document.body.append(canvas));
+    sketchpad.addEventListener('load', async () => {
+        document.body.append(canvas);
+        animateCSS('#settings>div', 'fadeOutLeft');
+        animateCSS('#settings>div:nth-of-type(2)', 'fadeOutRight');
+        document.querySelector('#gameZone').classList.remove('d-none');
+        await animateCSS('#gameZone', 'fadeInDown');
+        document.querySelector('#settings').remove();
+    });
 }
 
 socket.on('joinRoom', putPlayer);
@@ -69,9 +92,12 @@ copyBtn.addEventListener('click', (e) => {
     document.execCommand('copy');
 });
 
-document.querySelector('#createRoom').addEventListener('click', () => {
+document.querySelector('#createRoom').addEventListener('click', async () => {
+    await animateCSS('#landing>div>div', 'hinge');
     document.querySelector('#landing').remove();
     document.querySelector('#settings').classList.remove('d-none');
+    animateCSS('#settings div', 'jackInTheBox');
+    await animateCSS('#settings>div:nth-of-type(2)', 'jackInTheBox');
     if (!searchParams.has('id')) {
         my.id = socket.id;
         socket.emit('newPrivateRoom', my);
@@ -82,9 +108,11 @@ document.querySelector('#createRoom').addEventListener('click', () => {
     }
 });
 
-document.querySelector('#playGame').addEventListener('click', () => {
+document.querySelector('#playGame').addEventListener('click', async () => {
+    await animateCSS('#landing>div>div', 'hinge');
     document.querySelector('#landing').remove();
     document.querySelector('#settings').classList.remove('d-none');
+    await animateCSS('#settings div', 'jackInTheBox');
     my.id = socket.id;
     if (searchParams.has('id')) {
         document.querySelector('#gameLink').value = `${window.location.protocol}//${window.location.host}/?id=${searchParams.get('id')}`;
@@ -93,7 +121,7 @@ document.querySelector('#playGame').addEventListener('click', () => {
     socket.emit('joinRoom', { id: searchParams.get('id'), player: my });
 });
 
-document.querySelector('#startGame').addEventListener('click', () => {
+document.querySelector('#startGame').addEventListener('click', async () => {
     showCanvasArea();
     socket.emit('startGame');
     socket.emit('getPlayers');
