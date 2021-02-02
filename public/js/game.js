@@ -21,6 +21,10 @@ const click = new Howl({
     src: ['audio/click.mp3'],
 });
 
+const timerStart = new Howl({
+    src: ['audio/timer-start.mp3'],
+});
+
 document.querySelectorAll('button').forEach((button) => {
     button.addEventListener('mousedown', () => click.play());
 });
@@ -74,6 +78,7 @@ function startTimer(ms) {
         return updateClock;
     }()), 1000);
     intervalID = id;
+    timerStart.play();
 }
 
 socket.on('getPlayers', (players) => createScoreCard(players));
