@@ -1,4 +1,4 @@
-/* global MAX_POINTS, round */
+/* global MAX_POINTS, round, games */
 const { readFileSync } = require('fs');
 
 const words = JSON.parse(readFileSync('words.json').toString('utf-8'));
@@ -29,8 +29,13 @@ function get3Words() {
     return arr;
 }
 
+function getPlayersCount(roomID) {
+    return Object.keys(games[roomID]).filter((key) => key.length === 20).length;
+}
+
 module.exports = {
     getScore,
     wait,
     get3Words,
+    getPlayersCount,
 };
