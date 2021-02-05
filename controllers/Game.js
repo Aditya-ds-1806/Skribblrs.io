@@ -10,12 +10,15 @@ class Game {
 
     chosenWord(playerID) {
         const { io } = this;
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
+            function rejection(err) { reject(err); }
             const socket = io.of('/').sockets.get(playerID);
             socket.on('chooseWord', ({ word }) => {
                 socket.to(socket.roomID).emit('hideWord', { word: word.replace(/[A-Za-z]/g, '_ ') });
+                socket.removeListener('disconnect', rejection);
                 resolve(word);
             });
+            socket.once('disconnect', rejection);
         });
     }
 
@@ -57,12 +60,16 @@ class Game {
         io.to(prevPlayer).emit('disableCanvas');
         drawer.to(roomID).broadcast.emit('choosing', { name: drawer.player.name });
         io.to(player).emit('chooseWord', get3Words());
-        const word = await this.chosenWord(player);
-        games[roomID].currentWord = word;
-        io.to(roomID).emit('clearCanvas');
-        games[roomID].startTime = Date.now() / 1000;
-        io.to(roomID).emit('startTimer', { time });
-        await wait(roomID, time);
+        try {
+            const word = await this.chosenWord(player);
+            games[roomID].currentWord = word;
+            io.to(roomID).emit('clearCanvas');
+            games[roomID].startTime = Date.now() / 1000;
+            io.to(roomID).emit('startTimer', { time });
+            await wait(roomID, drawer, time);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     onMessage(data) {
