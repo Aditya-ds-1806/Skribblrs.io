@@ -55,6 +55,7 @@ class Game {
             }
         }
         io.to(socket.roomID).emit('endGame', { stats: games[socket.roomID] });
+        delete games[socket.roomID];
     }
 
     onMessage(data) {

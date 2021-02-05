@@ -14,8 +14,10 @@ class Disconnect {
             socket.player.id = socket.id;
             socket.to(socket.roomID).emit('disconnection', socket.player);
         }
-        delete games[roomID][socket.id];
-        if (getPlayersCount(roomID) === 0) delete games[roomID];
+        if (games[roomID]) {
+            if (games[roomID][socket.id].score === 0) delete games[roomID][socket.id];
+            if (getPlayersCount(roomID) === 0) delete games[roomID];
+        }
     }
 }
 
