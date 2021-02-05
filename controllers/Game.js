@@ -23,39 +23,46 @@ class Game {
         const { io } = this;
         players.forEach((playerID) => {
             const player = io.of('/').sockets.get(playerID);
-            player.hasGuessed = false;
+            if (player) player.hasGuessed = false;
         });
     }
 
     async startGame() {
         const { io, socket } = this;
-        const { time } = games[socket.roomID];
         const { rounds } = games[socket.roomID];
         const players = Array.from(await io.in(socket.roomID).allSockets());
         socket.to(socket.roomID).emit('startGame');
         for (let j = 0; j < rounds; j++) {
             /* eslint-disable no-await-in-loop */
             for (let i = 0; i < players.length; i++) {
-                const player = players[i];
-                const prevPlayer = players[(i - 1 + players.length) % players.length];
-                const drawer = io.of('/').sockets.get(player);
-                this.resetGuessedFlag(players);
-                games[socket.roomID].totalGuesses = 0;
-                games[socket.roomID].currentWord = '';
-                games[socket.roomID].drawer = player;
-                io.to(prevPlayer).emit('disableCanvas');
-                drawer.to(socket.roomID).broadcast.emit('choosing', { name: drawer.player.name });
-                io.to(player).emit('chooseWord', get3Words());
-                const word = await this.chosenWord(player);
-                games[socket.roomID].currentWord = word;
-                io.to(socket.roomID).emit('clearCanvas');
-                games[socket.roomID].startTime = Date.now() / 1000;
-                io.to(socket.roomID).emit('startTimer', { time });
-                await wait(socket.roomID, time);
+                await this.giveTurnTo(players, i);
             }
         }
         io.to(socket.roomID).emit('endGame', { stats: games[socket.roomID] });
         delete games[socket.roomID];
+    }
+
+    async giveTurnTo(players, i) {
+        const { io, socket } = this;
+        const { roomID } = socket;
+        const { time } = games[roomID];
+        const player = players[i];
+        const prevPlayer = players[(i - 1 + players.length) % players.length];
+        const drawer = io.of('/').sockets.get(player);
+        if (!drawer) return;
+        this.resetGuessedFlag(players);
+        games[roomID].totalGuesses = 0;
+        games[roomID].currentWord = '';
+        games[roomID].drawer = player;
+        io.to(prevPlayer).emit('disableCanvas');
+        drawer.to(roomID).broadcast.emit('choosing', { name: drawer.player.name });
+        io.to(player).emit('chooseWord', get3Words());
+        const word = await this.chosenWord(player);
+        games[roomID].currentWord = word;
+        io.to(roomID).emit('clearCanvas');
+        games[roomID].startTime = Date.now() / 1000;
+        io.to(roomID).emit('startTimer', { time });
+        await wait(roomID, time);
     }
 
     onMessage(data) {
