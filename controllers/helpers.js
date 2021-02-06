@@ -1,6 +1,8 @@
 /* global MAX_POINTS, round, games */
 const { readFileSync } = require('fs');
+const Chance = require('chance');
 
+const chance = new Chance();
 const words = JSON.parse(readFileSync('words.json').toString('utf-8'));
 
 function getScore(startTime, roundtime) {
@@ -21,13 +23,7 @@ function wait(roomID, drawer, ms) {
 }
 
 function get3Words() {
-    const arr = [];
-    for (let i = 0; i < 3; i++) {
-        const index = Math.floor(Math.random() * (words.length + 1));
-        const word = words[index];
-        arr.push(word);
-    }
-    return arr;
+    return chance.pickset(words, 3);
 }
 
 function getPlayersCount(roomID) {
