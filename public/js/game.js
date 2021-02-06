@@ -195,6 +195,7 @@ socket.on('endGame', async ({ stats }) => {
         score.textContent = stats[playerID].score;
 
         row.classList.add('row', 'mx-0', 'align-items-center');
+        avatar.classList.add('img-fluid', 'rounded-circle');
         imgDiv.classList.add('col-2', 'text-center');
         nameDiv.classList.add('col-7', 'text-center');
         scoreDiv.classList.add('col-3', 'text-center');
