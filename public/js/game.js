@@ -136,9 +136,12 @@ socket.on('startTimer', ({ time }) => startTimer(time));
 
 socket.on('message', ({ name, message }) => {
     const p = document.createElement('p');
-    const chat = document.createTextNode(`${name}: ${message}`);
+    const span = document.createElement('span');
+    const chat = document.createTextNode(`${message}`);
+    span.textContent = `${name}: `;
+    span.classList.add('fw-bold');
     p.classList.add('p-2', 'mb-0');
-    p.append(chat);
+    p.append(span, chat);
     document.querySelector('.messages').appendChild(p);
 });
 
