@@ -29,12 +29,11 @@ document.querySelectorAll('button').forEach((button) => {
     button.addEventListener('mousedown', () => click.play());
 });
 
-function chooseWord(e) {
-    e.preventDefault();
+function chooseWord(word) {
     pad.setReadOnly(false);
-    socket.emit('chooseWord', { word: this.textContent });
+    socket.emit('chooseWord', { word });
     const p = document.createElement('p');
-    p.textContent = this.textContent;
+    p.textContent = word;
     p.classList.add('lead', 'fw-bold', 'mb-0');
     document.querySelector('#wordDiv').innerHTML = '';
     document.querySelector('#wordDiv').append(p);
@@ -111,9 +110,9 @@ socket.on('chooseWord', async ([word1, word2, word3]) => {
     btn1.textContent = word1;
     btn2.textContent = word2;
     btn3.textContent = word3;
-    btn1.addEventListener('click', chooseWord);
-    btn2.addEventListener('click', chooseWord);
-    btn3.addEventListener('click', chooseWord);
+    btn1.addEventListener('click', () => chooseWord(word1));
+    btn2.addEventListener('click', () => chooseWord(word2));
+    btn3.addEventListener('click', () => chooseWord(word3));
     p.append(text);
     document.querySelector('#wordDiv').innerHTML = '';
     document.querySelector('#wordDiv').append(p, btn1, btn2, btn3);
@@ -123,6 +122,10 @@ socket.on('chooseWord', async ([word1, word2, word3]) => {
     clearInterval(intervalID);
     clock.stop();
     yourTurn.play();
+    const id = setTimeout(() => {
+        if (btn1) chooseWord(word2);
+        else clearInterval(id);
+    }, 15000);
 });
 
 socket.on('hideWord', ({ word }) => {
