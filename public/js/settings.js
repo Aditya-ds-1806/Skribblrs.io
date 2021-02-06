@@ -45,7 +45,7 @@ function putPlayer(player) {
     p.classList.add('text-center');
     img.src = player.avatar;
     img.alt = player.name;
-    img.classList.add('img-fluid');
+    img.classList.add('img-fluid', 'rounded-circle');
     div.classList.add('col-4', 'col-sm-3', 'col-md-4', 'col-lg-3');
     img.onload = async () => {
         div.appendChild(img);

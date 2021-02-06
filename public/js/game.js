@@ -52,7 +52,7 @@ function createScoreCard(players) {
         const score = document.createTextNode('Score: 0');
 
         img.src = player.avatar;
-        img.classList.add('img-fluid');
+        img.classList.add('img-fluid', 'rounded-circle');
         div.classList.add('row', 'justify-content-end', 'bg-white', 'py-1');
         avatar.classList.add('col-4');
         details.classList.add('col-6', 'text-center', 'my-auto');

@@ -21,7 +21,7 @@ function updateAvatar() {
     newAvatar.src = url;
     newAvatar.alt = 'Avatar';
     newAvatar.id = 'avatar';
-    newAvatar.classList.add('img-fluid', 'mb-4', 'mb-sm-0');
+    newAvatar.classList.add('img-fluid', 'rounded-circle', 'mb-4', 'mb-sm-0');
     newAvatar.addEventListener('load', () => {
         document.querySelector('#avatar').replaceWith(newAvatar);
     });
