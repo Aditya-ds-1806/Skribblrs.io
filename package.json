@@ -9,6 +9,7 @@
   "author": "Aditya D.S.",
   "license": "MIT",
   "dependencies": {
+    "chance": "^1.1.7",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "leven": "^3.1.0",
