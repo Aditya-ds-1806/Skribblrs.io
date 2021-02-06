@@ -53,9 +53,9 @@ function createScoreCard(players) {
 
         img.src = player.avatar;
         img.classList.add('img-fluid', 'rounded-circle');
-        div.classList.add('row', 'justify-content-end', 'bg-white', 'py-1');
-        avatar.classList.add('col-4');
-        details.classList.add('col-6', 'text-center', 'my-auto');
+        div.classList.add('row', 'justify-content-end', 'bg-white', 'py-1', 'align-items-center');
+        avatar.classList.add('col-5', 'col-xl-4');
+        details.classList.add('col-7', 'col-xl-6', 'text-center', 'my-auto');
         p1.classList.add('mb-0');
         p2.classList.add('mb-0');
         div.id = `skribblr-${player.id}`;

@@ -156,3 +156,9 @@ div.players div.row:nth-of-type(2n+1) {
     background-color: #fff3cd !important;
     border-color: #ffecb5;
 }
+
+@media (max-width: 992px) {
+    .messages {
+        height: 5em;
+    }
+}
