@@ -75,9 +75,11 @@ function showCanvasArea() {
 socket.on('joinRoom', putPlayer);
 socket.on('otherPlayers', (players) => players.forEach((player) => putPlayer(player)));
 socket.on('disconnection', async (player) => {
-    exit.play();
-    await animateCSS(`#skribblr-${player.id}`, 'fadeOutUp');
-    document.querySelector(`#skribblr-${player.id}`).remove();
+    if (document.querySelector(`#skribblr-${player.id}`)) {
+        exit.play();
+        await animateCSS(`#skribblr-${player.id}`, 'fadeOutUp');
+        document.querySelector(`#skribblr-${player.id}`).remove();
+    }
 });
 socket.on('startGame', showCanvasArea);
 
