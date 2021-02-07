@@ -123,7 +123,7 @@ socket.on('chooseWord', async ([word1, word2, word3]) => {
     clock.stop();
     yourTurn.play();
     const id = setTimeout(() => {
-        if (btn1) chooseWord(word2);
+        if (document.querySelector('#wordDiv button')) chooseWord(word2);
         else clearInterval(id);
     }, 15000);
 });
