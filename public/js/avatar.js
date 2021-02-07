@@ -3,8 +3,8 @@ const bgColor = document.querySelector('#bgColor');
 const playerName = document.querySelector('#playerName');
 const baseURL = 'https://avatars.dicebear.com/api';
 const my = {
-    name: '',
-    avatar: 'https://avatars.dicebear.com/api/avataaars/.svg',
+    name: localStorage.getItem('name') || '',
+    avatar: localStorage.getItem('avatar') || 'https://avatars.dicebear.com/api/avataaars/.svg',
 };
 
 const settings = document.createElement('script');
@@ -27,7 +27,14 @@ function updateAvatar() {
     });
     my.avatar = url;
     my.name = playerName.value;
+    localStorage.setItem('name', playerName.value);
+    localStorage.setItem('avatar', url);
 }
+
+window.onload = () => {
+    if (localStorage.getItem('avatar')) document.querySelector('#avatar').setAttribute('src', localStorage.getItem('avatar'));
+    if (localStorage.getItem('name')) playerName.setAttribute('value', localStorage.getItem('name'));
+};
 
 style.addEventListener('input', updateAvatar);
 bgColor.addEventListener('input', updateAvatar);
