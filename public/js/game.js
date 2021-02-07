@@ -132,6 +132,7 @@ socket.on('hideWord', ({ word }) => {
     const p = document.createElement('p');
     p.textContent = word;
     p.classList.add('lead', 'fw-bold', 'mb-0');
+    p.style.letterSpacing = '0.5em';
     document.querySelector('#wordDiv').innerHTML = '';
     document.querySelector('#wordDiv').append(p);
 });

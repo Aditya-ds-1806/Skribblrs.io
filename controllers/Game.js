@@ -14,7 +14,7 @@ class Game {
             function rejection(err) { reject(err); }
             const socket = io.of('/').sockets.get(playerID);
             socket.on('chooseWord', ({ word }) => {
-                socket.to(socket.roomID).emit('hideWord', { word: word.replace(/[A-Za-z]/g, '_ ') });
+                socket.to(socket.roomID).emit('hideWord', { word: word.replace(/[A-Za-z]/g, '_') });
                 socket.removeListener('disconnect', rejection);
                 resolve(word);
             });
