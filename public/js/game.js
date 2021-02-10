@@ -142,11 +142,13 @@ socket.on('message', ({ name, message }) => {
     const p = document.createElement('p');
     const span = document.createElement('span');
     const chat = document.createTextNode(`${message}`);
+    const messages = document.querySelector('.messages');
     span.textContent = `${name}: `;
     span.classList.add('fw-bold');
     p.classList.add('p-2', 'mb-0');
     p.append(span, chat);
-    document.querySelector('.messages').appendChild(p);
+    messages.appendChild(p);
+    messages.scrollTop = messages.scrollHeight;
 });
 
 socket.on('closeGuess', () => {
