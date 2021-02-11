@@ -85,8 +85,8 @@ class Game {
                 const { startTime } = games[socket.roomID];
                 const roundTime = games[socket.roomID].time;
                 const roomSize = io.sockets.adapter.rooms.get(socket.roomID).size;
-                socket.emit('correctGuess', { message: 'You guessed it right!' });
-                socket.broadcast.emit('correctGuess', { message: `${socket.player.name} has guessed the word!` });
+                socket.emit('correctGuess', { message: 'You guessed it right!', id: socket.id });
+                socket.broadcast.emit('correctGuess', { message: `${socket.player.name} has guessed the word!`, id: socket.id });
                 games[socket.roomID].totalGuesses++;
                 games[socket.roomID][socket.id].score += getScore(startTime, roundTime);
                 games[socket.roomID][drawer.id].score += BONUS;

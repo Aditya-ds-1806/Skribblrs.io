@@ -52,7 +52,7 @@ function createScoreCard(players) {
 
         img.src = player.avatar;
         img.classList.add('img-fluid', 'rounded-circle');
-        div.classList.add('row', 'justify-content-end', 'bg-white', 'py-1', 'align-items-center');
+        div.classList.add('row', 'justify-content-end', 'py-1', 'align-items-center');
         avatar.classList.add('col-5', 'col-xl-4');
         details.classList.add('col-7', 'col-xl-6', 'text-center', 'my-auto');
         p1.classList.add('mb-0');
@@ -78,9 +78,10 @@ function startTimer(ms) {
     }()), 1000);
     intervalID = id;
     timerStart.play();
+    document.querySelectorAll('.players .correct').forEach((player) => player.classList.remove('correct'));
 }
 
-function appendMessage({ name = '', message }, { correctGuess = false, closeGuess = false } = {}) {
+function appendMessage({ name = '', message, id }, { correctGuess = false, closeGuess = false } = {}) {
     const p = document.createElement('p');
     const chat = document.createTextNode(`${message}`);
     const messages = document.querySelector('.messages');
@@ -91,8 +92,11 @@ function appendMessage({ name = '', message }, { correctGuess = false, closeGues
         p.append(span);
     }
     p.classList.add('p-2', 'mb-0');
-    if (correctGuess) p.classList.add('correct');
     if (closeGuess) p.classList.add('close');
+    if (correctGuess) {
+        document.getElementById(`skribblr-${id}`).classList.add('correct');
+        p.classList.add('correct');
+    }
     p.append(chat);
     messages.appendChild(p);
     messages.scrollTop = messages.scrollHeight;
