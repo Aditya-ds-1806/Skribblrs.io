@@ -31,8 +31,11 @@
                             title="Choose your color">
                     </div>
                 </div>
-                <button class="btn btn-primary mt-3" id="createRoom">Create Private Room</button>
-                <button class="btn btn-success mt-3 disabled" id="playGame">Play</button>
+                <% if(!roomID) { %>
+                    <button class="btn btn-primary mt-3" id="createRoom">Create Private Room</button>
+                <% } else { %>
+                    <button class="btn btn-primary mt-3" id="playGame">Join Room</button>
+                <% } %>
             </div>
         </div>
     </div>

@@ -85,50 +85,44 @@ socket.on('startGame', showCanvasArea);
 
 if (searchParams.has('id')) {
     // player
-    document.querySelector('#playGame').classList.remove('disabled');
-    document.querySelector('#createRoom').classList.add('disabled');
     document.querySelector('#rounds').setAttribute('disabled', true);
     document.querySelector('#time').setAttribute('disabled', true);
     document.querySelector('#startGame').setAttribute('disabled', true);
+    document.querySelector('#playGame').addEventListener('click', async () => {
+        await animateCSS('#landing>div>div', 'hinge');
+        document.querySelector('#landing').remove();
+        document.querySelector('#settings').classList.remove('d-none');
+        await animateCSS('#settings div', 'jackInTheBox');
+        my.id = socket.id;
+        if (searchParams.has('id')) {
+            document.querySelector('#gameLink').value = `${window.location.protocol}//${window.location.host}/?id=${searchParams.get('id')}`;
+            putPlayer(my);
+        }
+        socket.emit('joinRoom', { id: searchParams.get('id'), player: my });
+    });
 } else {
     // room owner
     document.querySelector('#rounds').addEventListener('input', updateSettings);
     document.querySelector('#time').addEventListener('input', updateSettings);
-}
-
-copyBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.querySelector('#gameLink').select();
-    document.execCommand('copy');
-});
-
-document.querySelector('#createRoom').addEventListener('click', async () => {
-    await animateCSS('#landing>div>div', 'hinge');
-    document.querySelector('#landing').remove();
-    document.querySelector('#settings').classList.remove('d-none');
-    animateCSS('#settings div', 'jackInTheBox');
-    await animateCSS('#settings>div:nth-of-type(2)', 'jackInTheBox');
-    if (!searchParams.has('id')) {
+    document.querySelector('#createRoom').addEventListener('click', async () => {
+        await animateCSS('#landing>div>div', 'hinge');
+        document.querySelector('#landing').remove();
+        document.querySelector('#settings').classList.remove('d-none');
+        animateCSS('#settings div', 'jackInTheBox');
+        await animateCSS('#settings>div:nth-of-type(2)', 'jackInTheBox');
         my.id = socket.id;
         socket.emit('newPrivateRoom', my);
         socket.on('newPrivateRoom', (data) => {
             document.querySelector('#gameLink').value = `${window.location.protocol}//${window.location.host}/?id=${data.gameID}`;
             putPlayer(my);
         });
-    }
-});
+    });
+}
 
-document.querySelector('#playGame').addEventListener('click', async () => {
-    await animateCSS('#landing>div>div', 'hinge');
-    document.querySelector('#landing').remove();
-    document.querySelector('#settings').classList.remove('d-none');
-    await animateCSS('#settings div', 'jackInTheBox');
-    my.id = socket.id;
-    if (searchParams.has('id')) {
-        document.querySelector('#gameLink').value = `${window.location.protocol}//${window.location.host}/?id=${searchParams.get('id')}`;
-        putPlayer(my);
-    }
-    socket.emit('joinRoom', { id: searchParams.get('id'), player: my });
+copyBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('#gameLink').select();
+    document.execCommand('copy');
 });
 
 document.querySelector('#startGame').addEventListener('click', async () => {
