@@ -154,17 +154,21 @@ socket.on('message', ({ name, message }) => {
 socket.on('closeGuess', () => {
     const p = document.createElement('p');
     const chat = document.createTextNode('That was very close!!!');
+    const messages = document.querySelector('.messages');
     p.classList.add('p-2', 'mb-0', 'close');
     p.append(chat);
-    document.querySelector('.messages').appendChild(p);
+    messages.appendChild(p);
+    messages.scrollTop = messages.scrollHeight;
 });
 
 socket.on('correctGuess', () => {
     const p = document.createElement('p');
     const chat = document.createTextNode('You guessed it right!!!');
+    const messages = document.querySelector('.messages');
     p.classList.add('p-2', 'mb-0', 'correct');
     p.append(chat);
-    document.querySelector('.messages').appendChild(p);
+    messages.appendChild(p);
+    messages.scrollTop = messages.scrollHeight;
     correct.play();
 });
 
