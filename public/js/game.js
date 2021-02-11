@@ -80,6 +80,25 @@ function startTimer(ms) {
     timerStart.play();
 }
 
+function appendMessage({ name = '', message }, { correctGuess = false, closeGuess = false } = {}) {
+    const p = document.createElement('p');
+    const chat = document.createTextNode(`${message}`);
+    const messages = document.querySelector('.messages');
+    if (name !== '') {
+        const span = document.createElement('span');
+        span.textContent = `${name}: `;
+        span.classList.add('fw-bold');
+        p.append(span);
+    }
+    p.classList.add('p-2', 'mb-0');
+    if (correctGuess) p.classList.add('correct');
+    if (closeGuess) p.classList.add('close');
+    p.append(chat);
+    messages.appendChild(p);
+    messages.scrollTop = messages.scrollHeight;
+    if (message === 'You guessed it right!') correct.play();
+}
+
 socket.on('getPlayers', (players) => createScoreCard(players));
 socket.on('choosing', ({ name }) => {
     const p = document.createElement('p');
@@ -136,41 +155,11 @@ socket.on('hideWord', ({ word }) => {
     document.querySelector('#wordDiv').innerHTML = '';
     document.querySelector('#wordDiv').append(p);
 });
+
 socket.on('startTimer', ({ time }) => startTimer(time));
-
-socket.on('message', ({ name, message }) => {
-    const p = document.createElement('p');
-    const span = document.createElement('span');
-    const chat = document.createTextNode(`${message}`);
-    const messages = document.querySelector('.messages');
-    span.textContent = `${name}: `;
-    span.classList.add('fw-bold');
-    p.classList.add('p-2', 'mb-0');
-    p.append(span, chat);
-    messages.appendChild(p);
-    messages.scrollTop = messages.scrollHeight;
-});
-
-socket.on('closeGuess', () => {
-    const p = document.createElement('p');
-    const chat = document.createTextNode('That was very close!!!');
-    const messages = document.querySelector('.messages');
-    p.classList.add('p-2', 'mb-0', 'close');
-    p.append(chat);
-    messages.appendChild(p);
-    messages.scrollTop = messages.scrollHeight;
-});
-
-socket.on('correctGuess', () => {
-    const p = document.createElement('p');
-    const chat = document.createTextNode('You guessed it right!!!');
-    const messages = document.querySelector('.messages');
-    p.classList.add('p-2', 'mb-0', 'correct');
-    p.append(chat);
-    messages.appendChild(p);
-    messages.scrollTop = messages.scrollHeight;
-    correct.play();
-});
+socket.on('message', appendMessage);
+socket.on('closeGuess', (data) => appendMessage(data, { closeGuess: true }));
+socket.on('correctGuess', (data) => appendMessage(data, { correctGuess: true }));
 
 socket.on('updateScore', ({
     playerID,

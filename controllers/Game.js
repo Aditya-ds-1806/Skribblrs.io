@@ -85,7 +85,8 @@ class Game {
                 const { startTime } = games[socket.roomID];
                 const roundTime = games[socket.roomID].time;
                 const roomSize = io.sockets.adapter.rooms.get(socket.roomID).size;
-                socket.emit('correctGuess');
+                socket.emit('correctGuess', { message: 'You guessed it right!' });
+                socket.broadcast.emit('correctGuess', { message: `${socket.player.name} has guessed the word!` });
                 games[socket.roomID].totalGuesses++;
                 games[socket.roomID][socket.id].score += getScore(startTime, roundTime);
                 games[socket.roomID][drawer.id].score += BONUS;
@@ -102,7 +103,7 @@ class Game {
             socket.hasGuessed = true;
         } else if (distance < 3 && currentWord !== '') {
             io.in(socket.roomID).emit('message', { ...data, name: socket.player.name });
-            if (games[socket.roomID].drawer !== socket.id && !socket.hasGuessed) socket.emit('closeGuess');
+            if (games[socket.roomID].drawer !== socket.id && !socket.hasGuessed) socket.emit('closeGuess', { message: 'That was very close!' });
         } else {
             io.in(socket.roomID).emit('message', { ...data, name: socket.player.name });
         }
