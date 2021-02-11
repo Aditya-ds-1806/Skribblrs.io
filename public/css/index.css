@@ -6,6 +6,14 @@ body {
     overflow: hidden;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 #landing,
 #settings,
 #gameEnded {
