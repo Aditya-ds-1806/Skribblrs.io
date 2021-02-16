@@ -53,6 +53,7 @@ class Room {
         const { customWords, ...rest } = data;
         games[socket.roomID].time = Number(data.time) * 1000;
         games[socket.roomID].rounds = Number(data.rounds);
+        games[socket.roomID].probability = Number(data.probability);
         games[socket.roomID].customWords = customWords.split('\n').map((word) => word.trim()).filter((word) => word !== '');
         socket.to(socket.roomID).emit('settingsUpdate', rest);
         console.log(games[socket.roomID]);

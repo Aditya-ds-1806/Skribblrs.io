@@ -43,6 +43,10 @@
                 <textarea class="form-control" placeholder="word1, word2, word3..." id="customWords"
                     style="height: 20vh; resize:none"></textarea>
             </div>
+            <div class="mb-3">
+                <label for="probability" class="form-label">Custom words probability</label>
+                <input type="range" class="form-range" min="0" max="1" step="0.01" id="probability">
+            </div>
             <% } %>
             <button class="btn btn-primary w-100" id="startGame">Start Game</button>
         </div>

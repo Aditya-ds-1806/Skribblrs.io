@@ -33,6 +33,7 @@ function updateSettings(e) {
         rounds: document.querySelector('#rounds').value,
         time: document.querySelector('#time').value,
         customWords: document.querySelector('#customWords').value,
+        probability: document.querySelector('#probability').value,
     });
 }
 
@@ -106,6 +107,7 @@ if (searchParams.has('id')) {
     document.querySelector('#rounds').addEventListener('input', updateSettings);
     document.querySelector('#time').addEventListener('input', updateSettings);
     document.querySelector('#customWords').addEventListener('change', updateSettings);
+    document.querySelector('#probability').addEventListener('change', updateSettings);
     document.querySelector('#createRoom').addEventListener('click', async () => {
         await animateCSS('#landing>div>div', 'hinge');
         document.querySelector('#landing').remove();
