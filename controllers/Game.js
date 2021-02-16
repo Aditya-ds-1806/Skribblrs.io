@@ -52,7 +52,7 @@ class Game {
         const player = players[i];
         const prevPlayer = players[(i - 1 + players.length) % players.length];
         const drawer = io.of('/').sockets.get(player);
-        if (!drawer) return;
+        if (!drawer || !games[roomID]) return;
         this.resetGuessedFlag(players);
         games[roomID].totalGuesses = 0;
         games[roomID].currentWord = '';
