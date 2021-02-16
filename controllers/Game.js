@@ -59,7 +59,7 @@ class Game {
         games[roomID].drawer = player;
         io.to(prevPlayer).emit('disableCanvas');
         drawer.to(roomID).broadcast.emit('choosing', { name: drawer.player.name });
-        io.to(player).emit('chooseWord', get3Words());
+        io.to(player).emit('chooseWord', get3Words(roomID));
         try {
             const word = await this.chosenWord(player);
             games[roomID].currentWord = word;

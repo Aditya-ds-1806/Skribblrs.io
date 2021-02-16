@@ -22,8 +22,14 @@ function wait(roomID, drawer, ms) {
     });
 }
 
-function get3Words() {
-    return chance.pickset(words, 3);
+function get3Words(roomID) {
+    if (games[roomID].customWords.length < 3) return chance.pickset(words, 3);
+    const pickedWords = new Set();
+    while (pickedWords.size !== 3) {
+        const wordSet = chance.weighted([words, games[roomID].customWords], [0, 1]);
+        pickedWords.add(chance.pickone(wordSet));
+    }
+    return Array.from(pickedWords);
 }
 
 function getPlayersCount(roomID) {
