@@ -32,7 +32,7 @@ function updateSettings(e) {
     socket.emit('settingsUpdate', {
         rounds: document.querySelector('#rounds').value,
         time: document.querySelector('#time').value,
-        customWords: document.querySelector('#customWords').value,
+        customWords: Array.from(new Set(document.querySelector('#customWords').value.split('\n').map((word) => word.trim()).filter((word) => word !== ''))),
         probability: document.querySelector('#probability').value,
     });
 }
