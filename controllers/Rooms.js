@@ -13,6 +13,7 @@ class Room {
         games[id] = {
             rounds: 2,
             time: 40 * 1000,
+            customWords: [],
         };
         games[id][socket.id] = {};
         games[id][socket.id].score = 0;
@@ -49,9 +50,12 @@ class Room {
 
     updateSettings(data) {
         const { socket } = this;
+        const { customWords, ...rest } = data;
         games[socket.roomID].time = Number(data.time) * 1000;
         games[socket.roomID].rounds = Number(data.rounds);
-        socket.to(socket.roomID).emit('settingsUpdate', data);
+        games[socket.roomID].customWords = customWords.split('\n').map((word) => word.trim()).filter((word) => word !== '');
+        socket.to(socket.roomID).emit('settingsUpdate', rest);
+        console.log(games[socket.roomID]);
     }
 }
 
