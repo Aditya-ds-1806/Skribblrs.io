@@ -46,7 +46,7 @@ The app will run by default on port 3000. Open your browser and go to [http://lo
     - [Socket.io client](https://github.com/socketio/socket.io-client)
     - [EJS](https://github.com/mde/ejs)
     - [Howler.js](https://github.com/goldfire/howler.js)
-    - [DiceBear Avatars](https://avatars.dicebear.com/)
+    - [DiceBear Avatars](https://github.com/DiceBear/avatars)
     - [Bootstrap](https://github.com/twbs/bootstrap)
 
 ## Credits
