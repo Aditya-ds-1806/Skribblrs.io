@@ -1,5 +1,6 @@
 /* global socket, pad, Howl, animateCSS */
-let intervalID = 0;
+let timerID = 0;
+let pickWordID = 0;
 
 const yourTurn = new Howl({
     src: ['audio/your-turn.mp3'],
@@ -30,6 +31,7 @@ document.querySelectorAll('button').forEach((button) => {
 });
 
 function chooseWord(word) {
+    clearTimeout(pickWordID);
     pad.setReadOnly(false);
     socket.emit('chooseWord', { word });
     const p = document.createElement('p');
@@ -76,7 +78,7 @@ function startTimer(ms) {
         secs--;
         return updateClock;
     }()), 1000);
-    intervalID = id;
+    timerID = id;
     timerStart.play();
     document.querySelectorAll('.players .correct').forEach((player) => player.classList.remove('correct'));
 }
@@ -111,7 +113,7 @@ socket.on('choosing', ({ name }) => {
     document.querySelector('#wordDiv').innerHTML = '';
     document.querySelector('#wordDiv').append(p);
     document.querySelector('#clock').textContent = 0;
-    clearInterval(intervalID);
+    clearInterval(timerID);
     clock.stop();
 });
 
@@ -142,13 +144,10 @@ socket.on('chooseWord', async ([word1, word2, word3]) => {
     document.querySelector('#tools').classList.remove('d-none');
     await animateCSS('#tools', 'fadeInUp');
     document.querySelector('#clock').textContent = 0;
-    clearInterval(intervalID);
+    clearInterval(timerID);
     clock.stop();
     yourTurn.play();
-    const id = setTimeout(() => {
-        if (document.querySelector('#wordDiv button')) chooseWord(word2);
-        else clearInterval(id);
-    }, 15000);
+    pickWordID = setTimeout(() => chooseWord(word2), 15000);
 });
 
 socket.on('hideWord', ({ word }) => {
@@ -179,7 +178,7 @@ socket.on('endGame', async ({ stats }) => {
     let players = Object.keys(stats).filter((val) => val.length === 20);
     players = players.sort((id1, id2) => stats[id2].score - stats[id1].score);
 
-    clearInterval(intervalID);
+    clearInterval(timerID);
     document.querySelector('#clock').textContent = 0;
     await animateCSS('#gameZone', 'fadeOutLeft');
     document.querySelector('#gameZone').remove();
