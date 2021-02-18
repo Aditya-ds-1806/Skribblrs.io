@@ -12,6 +12,20 @@ function getScore(startTime, roundtime) {
     return Math.floor(((roundTime - elapsedTime) / roundTime) * MAX_POINTS);
 }
 
+function getHints(word) {
+    const hints = [];
+    const hintsCount = Math.floor(0.7 * word.length);
+    let prevHint = word.split('').map((char) => (char !== ' ' ? '_' : ' ')).join('');
+    while (hints.length !== hintsCount) {
+        const pos = chance.integer({ min: 0, max: word.length - 1 });
+        // eslint-disable-next-line no-continue
+        if (prevHint[pos] !== '_') continue;
+        prevHint = `${prevHint.substring(0, pos)}${word[pos]}${prevHint.substring(pos + 1)}`;
+        hints.push(prevHint);
+    }
+    return hints;
+}
+
 function wait(roomID, drawer, ms) {
     return new Promise((resolve, reject) => {
         round.on('everybodyGuessed', ({ roomID: callerRoomID }) => {
@@ -39,6 +53,7 @@ function getPlayersCount(roomID) {
 
 module.exports = {
     getScore,
+    getHints,
     wait,
     get3Words,
     getPlayersCount,
