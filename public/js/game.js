@@ -1,6 +1,7 @@
 /* global socket, pad, Howl, animateCSS */
 let timerID = 0;
 let pickWordID = 0;
+let hints = [];
 
 const yourTurn = new Howl({
     src: ['audio/your-turn.mp3'],
@@ -75,6 +76,10 @@ function startTimer(ms) {
         if (secs === 0) clearInterval(id);
         if (secs === 10) clock.play();
         document.querySelector('#clock').textContent = secs;
+        if (hints[0] && secs === hints[0].displayTime) {
+            document.querySelector('#wordDiv > p.lead.fw-bold.mb-0').textContent = hints[0].hint;
+            hints.shift();
+        }
         secs--;
         return updateClock;
     }()), 1000);
@@ -121,6 +126,8 @@ socket.on('settingsUpdate', (data) => {
     document.querySelector('#rounds').value = data.rounds;
     document.querySelector('#time').value = data.time;
 });
+
+socket.on('hints', (data) => { hints = data; });
 
 socket.on('chooseWord', async ([word1, word2, word3]) => {
     const p = document.createElement('p');
