@@ -73,11 +73,12 @@ function createScoreCard(players) {
 function startTimer(ms) {
     let secs = ms / 1000;
     const id = setInterval((function updateClock() {
+        const wordP = document.querySelector('#wordDiv > p.lead.fw-bold.mb-0');
         if (secs === 0) clearInterval(id);
         if (secs === 10) clock.play();
         document.querySelector('#clock').textContent = secs;
-        if (hints[0] && secs === hints[0].displayTime) {
-            document.querySelector('#wordDiv > p.lead.fw-bold.mb-0').textContent = hints[0].hint;
+        if (hints[0] && wordP && secs === hints[0].displayTime) {
+            wordP.textContent = hints[0].hint;
             hints.shift();
         }
         secs--;
