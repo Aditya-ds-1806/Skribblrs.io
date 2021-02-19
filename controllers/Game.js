@@ -1,6 +1,11 @@
 /* global games, BONUS, round */
 const leven = require('leven');
-const { get3Words, getScore, wait } = require('./helpers');
+const {
+    get3Words,
+    getScore,
+    wait,
+    getHints,
+} = require('./helpers');
 
 class Game {
     constructor(io, socket) {
@@ -64,6 +69,7 @@ class Game {
             const word = await this.chosenWord(player);
             games[roomID].currentWord = word;
             io.to(roomID).emit('clearCanvas');
+            drawer.to(roomID).broadcast.emit('hints', getHints(word, roomID));
             games[roomID].startTime = Date.now() / 1000;
             io.to(roomID).emit('startTimer', { time });
             await wait(roomID, drawer, time);
