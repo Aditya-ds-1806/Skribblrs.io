@@ -12,7 +12,17 @@ function getScore(startTime, roundtime) {
     return Math.floor(((roundTime - elapsedTime) / roundTime) * MAX_POINTS);
 }
 
-function getHints(word) {
+function populateDisplayTime(hints, roomID) {
+    const roundTime = games[roomID].time;
+    const startTime = Math.floor(roundTime / 2);
+    const hintInterval = Math.floor(startTime / hints.length);
+    return hints.map((hint, i) => ({
+        hint,
+        displayTime: Math.floor((startTime - (i * hintInterval)) / 1000),
+    }));
+}
+
+function getHints(word, roomID) {
     const hints = [];
     const hintsCount = Math.floor(0.7 * word.length);
     let prevHint = word.split('').map((char) => (char !== ' ' ? '_' : ' ')).join('');
@@ -23,7 +33,7 @@ function getHints(word) {
         prevHint = `${prevHint.substring(0, pos)}${word[pos]}${prevHint.substring(pos + 1)}`;
         hints.push(prevHint);
     }
-    return hints;
+    return populateDisplayTime(hints, roomID);
 }
 
 function wait(roomID, drawer, ms) {
