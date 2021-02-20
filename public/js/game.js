@@ -27,6 +27,10 @@ const timerStart = new Howl({
     src: ['audio/timer-start.mp3'],
 });
 
+const hint = new Howl({
+    src: ['audio/hint.mp3'],
+});
+
 document.querySelectorAll('button').forEach((button) => {
     button.addEventListener('mousedown', () => click.play());
 });
@@ -79,6 +83,8 @@ function startTimer(ms) {
         document.querySelector('#clock').textContent = secs;
         if (hints[0] && wordP && secs === hints[0].displayTime) {
             wordP.textContent = hints[0].hint;
+            hint.play();
+            animateCSS(wordP, 'tada', false);
             hints.shift();
         }
         secs--;
