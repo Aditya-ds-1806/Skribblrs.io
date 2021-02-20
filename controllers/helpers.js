@@ -42,7 +42,7 @@ function wait(roomID, drawer, ms) {
             if (callerRoomID === roomID) resolve();
         });
         drawer.on('disconnect', (err) => reject(err));
-        setTimeout(resolve, ms);
+        setTimeout(() => resolve(true), ms);
     });
 }
 

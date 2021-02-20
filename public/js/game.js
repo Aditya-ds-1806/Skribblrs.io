@@ -171,6 +171,7 @@ socket.on('startTimer', ({ time }) => startTimer(time));
 socket.on('message', appendMessage);
 socket.on('closeGuess', (data) => appendMessage(data, { closeGuess: true }));
 socket.on('correctGuess', (data) => appendMessage(data, { correctGuess: true }));
+socket.on('lastWord', ({ word }) => appendMessage({ message: `The word was ${word}` }));
 
 socket.on('updateScore', ({
     playerID,

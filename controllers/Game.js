@@ -72,7 +72,7 @@ class Game {
             drawer.to(roomID).broadcast.emit('hints', getHints(word, roomID));
             games[roomID].startTime = Date.now() / 1000;
             io.to(roomID).emit('startTimer', { time });
-            await wait(roomID, drawer, time);
+            if (await wait(roomID, drawer, time)) io.to(roomID).emit('lastWord', { word });
         } catch (error) {
             console.log(error);
         }
