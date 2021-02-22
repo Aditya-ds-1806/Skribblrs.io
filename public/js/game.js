@@ -95,7 +95,7 @@ function startTimer(ms) {
     document.querySelectorAll('.players .correct').forEach((player) => player.classList.remove('correct'));
 }
 
-function appendMessage({ name = '', message, id }, { correctGuess = false, closeGuess = false } = {}) {
+function appendMessage({ name = '', message, id }, { correctGuess = false, closeGuess = false, lastWord = false } = {}) {
     const p = document.createElement('p');
     const chat = document.createTextNode(`${message}`);
     const messages = document.querySelector('.messages');
@@ -107,6 +107,7 @@ function appendMessage({ name = '', message, id }, { correctGuess = false, close
     }
     p.classList.add('p-2', 'mb-0');
     if (closeGuess) p.classList.add('close');
+    if (lastWord) p.classList.add('alert-warning');
     if (correctGuess) {
         document.getElementById(`skribblr-${id}`).classList.add('correct');
         p.classList.add('correct');
@@ -177,7 +178,7 @@ socket.on('startTimer', ({ time }) => startTimer(time));
 socket.on('message', appendMessage);
 socket.on('closeGuess', (data) => appendMessage(data, { closeGuess: true }));
 socket.on('correctGuess', (data) => appendMessage(data, { correctGuess: true }));
-socket.on('lastWord', ({ word }) => appendMessage({ message: `The word was ${word}` }));
+socket.on('lastWord', ({ word }) => appendMessage({ message: `The word was ${word}` }, { lastWord: true }));
 
 socket.on('updateScore', ({
     playerID,
