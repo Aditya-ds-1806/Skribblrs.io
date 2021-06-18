@@ -1,8 +1,10 @@
+/* eslint-disable func-names */
 /* global io, my, Howl */
 const socket = io();
 const params = window.location.toString().substring(window.location.toString().indexOf('?'));
 const searchParams = new URLSearchParams(params);
 const copyBtn = document.querySelector('#copy');
+let language = 'English';
 
 const pop = new Howl({
     src: ['audio/pop.mp3'],
@@ -34,6 +36,7 @@ function updateSettings(e) {
         time: document.querySelector('#time').value,
         customWords: Array.from(new Set(document.querySelector('#customWords').value.split('\n').map((word) => word.trim()).filter((word) => word !== ''))),
         probability: document.querySelector('#probability').value,
+        language: document.querySelector('#language').value,
     });
 }
 
@@ -90,6 +93,7 @@ if (searchParams.has('id')) {
     document.querySelector('#rounds').setAttribute('disabled', true);
     document.querySelector('#time').setAttribute('disabled', true);
     document.querySelector('#startGame').setAttribute('disabled', true);
+    document.querySelector('#language').setAttribute('disabled', true);
     document.querySelector('#playGame').addEventListener('click', async () => {
         await animateCSS('#landing>div>div', 'hinge');
         document.querySelector('#landing').remove();
@@ -108,6 +112,7 @@ if (searchParams.has('id')) {
     document.querySelector('#time').addEventListener('input', updateSettings);
     document.querySelector('#customWords').addEventListener('change', updateSettings);
     document.querySelector('#probability').addEventListener('change', updateSettings);
+    document.querySelector('#language').addEventListener('change', updateSettings);
     document.querySelector('#createRoom').addEventListener('click', async () => {
         await animateCSS('#landing>div>div', 'hinge');
         document.querySelector('#landing').remove();
@@ -133,4 +138,16 @@ document.querySelector('#startGame').addEventListener('click', async () => {
     showCanvasArea();
     socket.emit('startGame');
     socket.emit('getPlayers');
+});
+
+// eslint-disable-next-line no-unused-vars
+document.querySelector('#language').addEventListener('input', function () {
+    // eslint-disable-next-line no-unused-vars
+    language = this.value;
+    if (language === 'English') return;
+    if (document.querySelector('#transliterate')) return;
+    const script = document.createElement('script');
+    script.id = 'transliterate';
+    script.src = 'js/transliterate.js';
+    document.body.append(script);
 });
