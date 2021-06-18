@@ -1,4 +1,4 @@
-/* global socket, pad, Howl, animateCSS */
+/* global socket, pad, Howl, animateCSS, language */
 let timerID = 0;
 let pickWordID = 0;
 let hints = [];
@@ -81,7 +81,7 @@ function startTimer(ms) {
         if (secs === 0) clearInterval(id);
         if (secs === 10) clock.play();
         document.querySelector('#clock').textContent = secs;
-        if (hints[0] && wordP && secs === hints[0].displayTime) {
+        if (hints[0] && wordP && secs === hints[0].displayTime && pad.readOnly) {
             wordP.textContent = hints[0].hint;
             hint.play();
             animateCSS(wordP, 'tada', false);
@@ -133,6 +133,15 @@ socket.on('choosing', ({ name }) => {
 socket.on('settingsUpdate', (data) => {
     document.querySelector('#rounds').value = data.rounds;
     document.querySelector('#time').value = data.time;
+    document.querySelector('#language').value = data.language;
+    // eslint-disable-next-line no-global-assign
+    language = data.language;
+    if (language === 'English') return;
+    if (document.querySelector('#transliterate')) return;
+    const script = document.createElement('script');
+    script.id = 'transliterate';
+    script.src = 'js/transliterate.js';
+    document.body.append(script);
 });
 
 socket.on('hints', (data) => { hints = data; });

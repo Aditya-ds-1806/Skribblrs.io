@@ -1,5 +1,6 @@
 /* global games, BONUS, round */
 const leven = require('leven');
+const GraphemeSplitter = require('grapheme-splitter');
 const {
     get3Words,
     getScore,
@@ -7,6 +8,7 @@ const {
     getHints,
 } = require('./helpers');
 
+const splitter = new GraphemeSplitter();
 class Game {
     constructor(io, socket) {
         this.io = io;
@@ -19,7 +21,7 @@ class Game {
             function rejection(err) { reject(err); }
             const socket = io.of('/').sockets.get(playerID);
             socket.on('chooseWord', ({ word }) => {
-                socket.to(socket.roomID).emit('hideWord', { word: word.replace(/[A-Za-z]/g, '_') });
+                socket.to(socket.roomID).emit('hideWord', { word: splitter.splitGraphemes(word).map((char) => (char !== ' ' ? '_' : char)).join('') });
                 socket.removeListener('disconnect', rejection);
                 resolve(word);
             });

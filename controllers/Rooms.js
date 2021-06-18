@@ -14,6 +14,7 @@ class Room {
             rounds: 2,
             time: 40 * 1000,
             customWords: [],
+            language: 'English',
         };
         games[id][socket.id] = {};
         games[id][socket.id].score = 0;
@@ -55,6 +56,7 @@ class Room {
         games[socket.roomID].rounds = Number(data.rounds);
         games[socket.roomID].probability = Number(data.probability);
         games[socket.roomID].customWords = customWords;
+        games[socket.roomID].language = data.language;
         socket.to(socket.roomID).emit('settingsUpdate', rest);
         console.log(games[socket.roomID]);
     }
