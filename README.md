@@ -21,7 +21,7 @@ The project requires Node.js to be installed on your system. To run the project 
 git clone https://github.com/Aditya-ds-1806/Skribblrs.io.git
 cd Skribblrs.io
 npm i
-node start
+npm run start
 ```
 
 The app will run by default on port 3000. Open your browser and go to [http://localhost:3000](http://localhost:3000).
