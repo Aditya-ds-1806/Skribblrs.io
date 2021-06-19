@@ -49,6 +49,8 @@ The app will run by default on port 3000. Open your browser and go to [http://lo
     - [Howler.js](https://github.com/goldfire/howler.js)
     - [DiceBear Avatars](https://github.com/DiceBear/avatars)
     - [Bootstrap](https://github.com/twbs/bootstrap)
+    - [Varnam Transliteration API](https://github.com/varnamproject)
+
 
 ## Credits
 
