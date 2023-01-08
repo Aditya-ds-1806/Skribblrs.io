@@ -2,14 +2,14 @@
 
 ![CodeQL](https://github.com/Aditya-ds-1806/Skribblrs.io/workflows/CodeQL/badge.svg?branch=main)
 ![OSSAR](https://github.com/Aditya-ds-1806/Skribblrs.io/workflows/OSSAR/badge.svg?branch=main)
-![Website](https://img.shields.io/website?url=https%3A%2F%2Fskribblrs.herokuapp.com)
+![Website](https://img.shields.io/website?url=https%3A%2F%2Fskribblrs.up.railway.app/)
 [![GitHub license](https://img.shields.io/github/license/Aditya-ds-1806/Skribblrs.io)](https://github.com/Aditya-ds-1806/Skribblrs.io/blob/main/LICENSE)
 
 Skribblrs.io is my attempt at building a clone of the web-based drawing and guessing game [skribbl.io](https://skribbl.io).
 
-To play a game: [https://skribblrs.herokuapp.com](https://skribblrs.herokuapp.com)
+To play a game: [https://skribblrs.up.railway.app/](https://skribblrs.up.railway.app/)
 
-> It might take a couple of minutes to respond (I am on heroku free tier, so the app shuts down automatically if there is no activity.)
+> It might take a few seconds to respond due to inactivity.
 
 The site does not collect any user data or display ads.
 
